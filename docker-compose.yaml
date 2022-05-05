@@ -1,0 +1,29 @@
+version: '3.9'
+
+x-common-env: &common-env
+  MONGO_URL: mongodb://mongo:27017/
+  MONGO_DATABASE: blog_server
+
+x-common-build: &common-build
+  image: golang:latest
+  working_dir: /src
+  environment:
+    <<: *common-env
+  volumes:
+  - .:/src
+  - ~/go/pkg/mod/cache:/go/pkg/mod/cache
+
+services:
+  mongo:
+    image: mongo:5
+
+  lint:
+    image: golangci/golangci-lint:v1.44.2
+    working_dir: /src
+    environment:
+      GOLANGCI_LINT_CACHE: /src/.cache/golangci-lint-cache
+    volumes:
+    - .:/src
+    command:
+    - make
+    - lint
