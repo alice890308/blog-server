@@ -3,6 +3,7 @@ version: '3.9'
 x-common-env: &common-env
   MONGO_URL: mongodb://mongo:27017/
   MONGO_DATABASE: blog_server
+  REDIS_ADDR: redis:6379
 
 x-common-build: &common-build
   image: golang:latest
@@ -16,6 +17,9 @@ x-common-build: &common-build
 services:
   mongo:
     image: mongo:5
+  
+  redis:
+    image: redis:6.2-alpine
 
   lint:
     image: golangci/golangci-lint:v1.44.2
