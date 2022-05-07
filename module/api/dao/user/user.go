@@ -14,6 +14,7 @@ type User struct {
 	Name     string             `bson:"name,omitempty"`
 	Password string             `bson:"password,omitempty"`
 	Alice    string
+	Bob      string
 }
 
 type UserDAO interface {
