@@ -13,6 +13,7 @@ type User struct {
 	Account  string             `bson:"acount,omitempty"`
 	Name     string             `bson:"name,omitempty"`
 	Password string             `bson:"password,omitempty"`
+	Alice    string
 }
 
 type UserDAO interface {
