@@ -3,7 +3,6 @@ package dao
 import (
 	"context"
 	"errors"
-	"fmt"
 
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
@@ -26,14 +25,6 @@ type UserDAO interface {
 var (
 	ErrUserNotFound = errors.New("user not found")
 )
-
-func getUserKey(id primitive.ObjectID) string {
-	return "getUser:" + id.Hex()
-}
-
-func listUserKey(limit, skip int64) string {
-	return fmt.Sprintf("listUser:%d:%d", limit, skip)
-}
 
 func NewFakeUser() *User {
 	id := primitive.NewObjectID()
