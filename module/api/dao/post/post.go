@@ -14,7 +14,6 @@ type Post struct {
 	Content   string             `bson:"content,omitempty"`
 	Views     int                `bson:"views,omitempty"`
 	Likes     int                `bson:"likes,omitempty"`
-	ReadTime  int                `bson:"read_time,omitempty"`
 	Tags      []string           `bson:"tags,omitempty"`
 	Image     string             `bson:"image,omitempty"`
 	CreatedAT time.Time          `bson:"created_at,omitempty"`
