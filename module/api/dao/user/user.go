@@ -25,14 +25,3 @@ type UserDAO interface {
 var (
 	ErrUserNotFound = errors.New("user not found")
 )
-
-func NewFakeUser() *User {
-	id := primitive.NewObjectID()
-
-	return &User{
-		ID:       id,
-		Account:  "fake account",
-		Name:     "fake user name",
-		Password: "fake password",
-	}
-}
