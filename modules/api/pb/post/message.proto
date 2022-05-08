@@ -6,12 +6,6 @@ option go_package = "github.com/alice890308/blog-server/modules/api/post/pb";
 
 import "google/protobuf/timestamp.proto";
 
-message HealthzRequest {}
-
-message HealthzResponse {
-    string status = 1;
-}
-
 message PostInfo {
     string id = 1;
     string user_id = 2;
@@ -37,6 +31,7 @@ message GetPostResponse {
 message ListPostRequest {
     int64 limit = 1;
     int64 skip = 2;
+    optional string filter = 3;
 }
 
 message ListPostResponse {
