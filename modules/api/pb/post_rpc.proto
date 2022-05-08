@@ -1,0 +1,55 @@
+syntax = "proto3";
+
+package pb;
+
+option go_package = "github.com/alice890308/blog-server/modules/api/pb";
+
+import "google/api/annotations.proto";
+import "modules/api/pb/post_message.proto";
+
+service Post {
+    rpc GetPost(GetPostRequest) returns (GetPostResponse) {
+        option (google.api.http) = {
+            get: "/posts/get/{id}"
+            response_body: "post"
+        };
+    }
+
+    rpc ListPost(ListPostRequest) returns (ListPostResponse) {
+        option (google.api.http) = {
+            get: "/posts/list"
+            response_body: "*"
+        };
+    }
+
+    rpc CreatePost(CreatePostRequest) returns (CreatePostResponse) {
+        option (google.api.http) = {
+            post: "/posts/create"
+            body: "*"
+            response_body: "*"
+        };
+    }
+
+    rpc UpdatePostContent(UpdatePostContentRequest) returns (UpdatePostContentResponse) {
+        option (google.api.http) = {
+            put: "/posts/updateContent"
+            body: "*"
+            response_body: "*"
+        };
+    }
+
+    rpc UpdatePostLikes(UpdatePostLikesRequest) returns (UpdatePostLikesResponse) {
+        option (google.api.http) = {
+            put: "/posts/updateLikes"
+            body: "*"
+            response_body: "*"
+        };
+    }
+
+    rpc DeletePost(DeletePostRequest) returns (DeletePostResponse) {
+        option (google.api.http) = {
+            delete: "/posts/delete/{id}"
+            response_body: "*"
+        };
+    }
+}
