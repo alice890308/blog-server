@@ -1,0 +1,48 @@
+syntax = "proto3";
+
+package user.pb;
+
+import "google/api/annotations.proto";
+import "module/api/pb/user/message.proto";
+
+option go_package = "github.com/alice890308/blog-server/modules/api/pb/user";
+
+service User {
+    rpc CreateUser(CreateUserRequest) returns (CreateUserResponse) {
+        option (google.api.http) = {
+            post: "/users"
+            body: "*"
+			response_body: "*"
+        };
+    }
+
+    rpc GetUser(GetUserRequest) returns (GetUserResponse) {
+        option (google.api.http) = {
+            get: "/users/{id}"
+            response_body: "*"
+        };
+    }
+
+    rpc ListUser(ListUserRequest) returns (ListUserResponse) {
+        option (google.api.http) = {
+            get: "/users"
+            response_body: "*"
+        };
+    }
+
+    rpc UpdateUser(UpdateUserRequest) returns (UpdateUserResponse) {
+        option (google.api.http) = {
+            put: "/users/{id}"
+            body: "*"
+            response_body: "*"
+        };
+    }
+
+    rpc DeleteUser(DeleteUserRequest) returns (DeleteUserResponse) {
+        option (google.api.http) = {
+            delete: "/users/{id}"
+            resposne_body: "*"
+        };
+    }
+}
+
