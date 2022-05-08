@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package post.pb;
+
+import "google/api/annotations.proto";
+import "modules/api/pb/post/message.proto";
+
+service Post {
+    rpc GetPost(GetPostRequest) returns (GetPostResponse) {
+        option (google.api.http) = {
+            get: "/v1/posts/{id}"
+            response_body: ""
+        };
+    }
+}
