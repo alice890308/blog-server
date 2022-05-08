@@ -1,12 +1,14 @@
 version: '3.9'
 
 x-common-env: &common-env
+  GOPATH: /go
+  GOCACHE: /src/.cache/gocache
   MONGO_URL: mongodb://mongo:27017/
   MONGO_DATABASE: blog_server
   REDIS_ADDR: redis:6379
 
 x-common-build: &common-build
-  image: golang:latest
+  image: justin0u0/golang-protoc:protoc-3.19.3-golang-1.17
   working_dir: /src
   environment:
     <<: *common-env
@@ -20,6 +22,12 @@ services:
   
   redis:
     image: redis:6.2-alpine
+  
+  generate:
+    <<: *common-build
+    command:
+    - make
+    - generate
 
   lint:
     image: golangci/golangci-lint:v1.44.2
