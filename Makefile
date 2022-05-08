@@ -40,10 +40,10 @@ $1.generate: bin/protoc-gen-go bin/protoc-gen-go-grpc bin/protoc-gen-grpc-gatewa
 	protoc \
 		-I . \
 		-I ./pkg/pb \
-		--go_out=paths=source_relative:. \
-		--go-grpc_out=paths=source_relative:. \
-		--grpc-gateway_out=paths=source_relative:. \
-		./modules/$1/pb/*.proto
+		--go_out=./modules/$1/pb --proto_path=./modules/$1/proto \
+		--go-grpc_out=./modules/$1/pb --proto_path=./modules/$1/proto \
+		--grpc-gateway_out=./modules/$1/pb --proto_path=./modules/$1/proto \
+		./modules/$1/proto/*.proto
 	
 	go generate ./modules/$1/...
 
