@@ -1,0 +1,77 @@
+syntax = "proto3";
+
+package post.pb;
+
+option go_package = "github.com/alice890308/blog-server/modules/api/post/pb";
+
+import "google/protobuf/timestamp.proto";
+
+message HealthzRequest {}
+
+message HealthzResponse {
+    string status = 1;
+}
+
+message PostInfo {
+    string id = 1;
+    string user_id = 2;
+    string title = 3;
+    string content = 4;
+    uint32 views = 5;
+    uint32 likes = 6;
+    string image = 7;
+    repeated string tags = 8;
+    google.protobuf.Timestamp created_at = 9;
+    google.protobuf.Timestamp updated_at = 10;
+    google.protobuf.Timestamp deleted_at = 11;
+}
+
+message GetPostRequest {
+    string id = 1;
+}
+
+message GetPostResponse {
+    PostInfo post = 1;
+}
+
+message ListPostRequest {
+    int64 limit = 1;
+    int64 skip = 2;
+}
+
+message ListPostResponse {
+    repeated PostInfo posts = 1;
+}
+
+message CreatePostRequest {
+    string title = 1;
+    string user_id = 2;
+    string content = 3;
+    repeated string tags = 4;
+}
+
+message CreatePostResponse {
+    string id = 1;
+}
+
+message UpdatePostContentRequest {
+    string id = 1;
+    string title = 2;
+    string content = 3;
+    repeated string tags = 4;
+}
+
+message UpdatePostContentResponse {}
+
+message UpdatePostLikesRequest {
+    string id = 1;
+    uint32 likes = 2;
+}
+
+message UpdatePostLikesResponse {}
+
+message DeletePostRequest {
+    string id = 1;
+}
+
+message DeletePostResponse {}
