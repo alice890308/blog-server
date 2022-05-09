@@ -62,15 +62,39 @@ func (dao *mongoPostDAO) Create(ctx context.Context, post *Post) (*Post, error) 
 	return post, nil
 }
 
-func (dao *mongoPostDAO) Update(ctx context.Context, post *Post) (*Post, error) {
-	if result, err := dao.collection.ReplaceOne(
+func (dao *mongoPostDAO) UpdateContent(ctx context.Context, post *Post) error {
+	if result, err := dao.collection.UpdateOne(
 		ctx,
 		bson.M{"_id": post.ID},
-		post,
+		bson.M{
+			"$set": bson.M{
+				"title":   post.Title,
+				"content": post.Content,
+				"tags":    post.Tags,
+			},
+		},
 	); err != nil {
-		return nil, err
+		return err
 	} else if result.ModifiedCount == 0 {
-		return nil, ErrPostNotFound
+		return ErrPostNotFound
+	}
+
+	return nil
+}
+
+func (dao *mongoPostDAO) UpdateLikes(ctx context.Context, id primitive.ObjectID) error {
+	if result, err := dao.collection.UpdateOne(
+		ctx,
+		bson.M{"_id": id},
+		bson.M{
+			"$inc": bson.M{
+				"likes": 1,
+			},
+		},
+	); err != nil {
+		return err
+	} else if result.ModifiedCount == 0 {
+		return ErrPostNotFound
 	}
 
 	return nil

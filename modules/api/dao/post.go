@@ -24,10 +24,11 @@ type Post struct {
 	DeletedAT time.Time          `bson:"deleted_at,omitempty"`
 }
 
-func (p *Post) ToProto() *pb.PostInfo {
+func (p *Post) ToProto(userName string) *pb.PostInfo {
 	return &pb.PostInfo{
 		Id:        p.ID.String(),
 		UserId:    p.UserID.String(),
+		UserName:  userName,
 		Title:     p.Title,
 		Content:   p.Content,
 		Views:     uint32(p.Views),
@@ -36,7 +37,6 @@ func (p *Post) ToProto() *pb.PostInfo {
 		Image:     p.Image,
 		CreatedAt: timestamppb.New(p.CreatedAT),
 		UpdatedAt: timestamppb.New(p.UpdatedAT),
-		DeletedAt: timestamppb.New(p.DeletedAT),
 	}
 }
 
@@ -44,7 +44,8 @@ type PostDAO interface {
 	Get(ctx context.Context, id primitive.ObjectID) (*Post, error)
 	List(ctx context.Context, limit, skip int64) ([]*Post, error)
 	Create(ctx context.Context, post *Post) (*Post, error)
-	Update(ctx context.Context, post *Post) (*Post, error)
+	UpdateContent(ctx context.Context, post *Post) error
+	UpdateLikes(ctx context.Context, id primitive.ObjectID) error
 	Delete(ctx context.Context, id primitive.ObjectID) error
 }
 
