@@ -10,21 +10,21 @@ import "modules/api/proto/post_message.proto";
 service Post {
     rpc GetPost(GetPostRequest) returns (GetPostResponse) {
         option (google.api.http) = {
-            get: "/posts/get/{id}"
+            get: "/posts/{id}"
             response_body: "post"
         };
     }
 
     rpc ListPost(ListPostRequest) returns (ListPostResponse) {
         option (google.api.http) = {
-            get: "/posts/list"
+            get: "/posts"
             response_body: "*"
         };
     }
 
     rpc CreatePost(CreatePostRequest) returns (CreatePostResponse) {
         option (google.api.http) = {
-            post: "/posts/create"
+            post: "/posts"
             body: "*"
             response_body: "*"
         };
@@ -32,7 +32,7 @@ service Post {
 
     rpc UpdatePostContent(UpdatePostContentRequest) returns (UpdatePostContentResponse) {
         option (google.api.http) = {
-            put: "/posts/updateContent/{id}"
+            put: "/posts/content/{id}"
             body: "*"
             response_body: "*"
         };
@@ -40,7 +40,7 @@ service Post {
 
     rpc UpdatePostLikes(UpdatePostLikesRequest) returns (UpdatePostLikesResponse) {
         option (google.api.http) = {
-            put: "/posts/updateLikes/{id}"
+            put: "/posts/likes/{id}"
             body: "*"
             response_body: "*"
         };
@@ -48,7 +48,7 @@ service Post {
 
     rpc DeletePost(DeletePostRequest) returns (DeletePostResponse) {
         option (google.api.http) = {
-            delete: "/posts/delete/{id}"
+            delete: "/posts/{id}"
             response_body: "*"
         };
     }
