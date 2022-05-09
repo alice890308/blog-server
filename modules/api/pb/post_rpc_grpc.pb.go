@@ -24,6 +24,7 @@ const _ = grpc.SupportPackageIsVersion7
 type PostClient interface {
 	GetPost(ctx context.Context, in *GetPostRequest, opts ...grpc.CallOption) (*GetPostResponse, error)
 	ListPost(ctx context.Context, in *ListPostRequest, opts ...grpc.CallOption) (*ListPostResponse, error)
+	ListPostByUserID(ctx context.Context, in *ListPostByUserIDRequest, opts ...grpc.CallOption) (*ListPostByUserIDResponse, error)
 	CreatePost(ctx context.Context, in *CreatePostRequest, opts ...grpc.CallOption) (*CreatePostResponse, error)
 	UpdatePostContent(ctx context.Context, in *UpdatePostContentRequest, opts ...grpc.CallOption) (*UpdatePostContentResponse, error)
 	UpdatePostLikes(ctx context.Context, in *UpdatePostLikesRequest, opts ...grpc.CallOption) (*UpdatePostLikesResponse, error)
@@ -51,6 +52,15 @@ func (c *postClient) GetPost(ctx context.Context, in *GetPostRequest, opts ...gr
 func (c *postClient) ListPost(ctx context.Context, in *ListPostRequest, opts ...grpc.CallOption) (*ListPostResponse, error) {
 	out := new(ListPostResponse)
 	err := c.cc.Invoke(ctx, "/pb.Post/ListPost", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *postClient) ListPostByUserID(ctx context.Context, in *ListPostByUserIDRequest, opts ...grpc.CallOption) (*ListPostByUserIDResponse, error) {
+	out := new(ListPostByUserIDResponse)
+	err := c.cc.Invoke(ctx, "/pb.Post/ListPostByUserID", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -108,6 +118,7 @@ func (c *postClient) DeletePost(ctx context.Context, in *DeletePostRequest, opts
 type PostServer interface {
 	GetPost(context.Context, *GetPostRequest) (*GetPostResponse, error)
 	ListPost(context.Context, *ListPostRequest) (*ListPostResponse, error)
+	ListPostByUserID(context.Context, *ListPostByUserIDRequest) (*ListPostByUserIDResponse, error)
 	CreatePost(context.Context, *CreatePostRequest) (*CreatePostResponse, error)
 	UpdatePostContent(context.Context, *UpdatePostContentRequest) (*UpdatePostContentResponse, error)
 	UpdatePostLikes(context.Context, *UpdatePostLikesRequest) (*UpdatePostLikesResponse, error)
@@ -125,6 +136,9 @@ func (UnimplementedPostServer) GetPost(context.Context, *GetPostRequest) (*GetPo
 }
 func (UnimplementedPostServer) ListPost(context.Context, *ListPostRequest) (*ListPostResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListPost not implemented")
+}
+func (UnimplementedPostServer) ListPostByUserID(context.Context, *ListPostByUserIDRequest) (*ListPostByUserIDResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListPostByUserID not implemented")
 }
 func (UnimplementedPostServer) CreatePost(context.Context, *CreatePostRequest) (*CreatePostResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreatePost not implemented")
@@ -186,6 +200,24 @@ func _Post_ListPost_Handler(srv interface{}, ctx context.Context, dec func(inter
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(PostServer).ListPost(ctx, req.(*ListPostRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Post_ListPostByUserID_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListPostByUserIDRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(PostServer).ListPostByUserID(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/pb.Post/ListPostByUserID",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(PostServer).ListPostByUserID(ctx, req.(*ListPostByUserIDRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -294,6 +326,10 @@ var Post_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "ListPost",
 			Handler:    _Post_ListPost_Handler,
+		},
+		{
+			MethodName: "ListPostByUserID",
+			Handler:    _Post_ListPostByUserID_Handler,
 		},
 		{
 			MethodName: "CreatePost",

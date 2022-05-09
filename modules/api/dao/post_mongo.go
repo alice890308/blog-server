@@ -51,6 +51,27 @@ func (dao *mongoPostDAO) List(ctx context.Context, limit, skip int64) ([]*Post, 
 	return posts, nil
 }
 
+func (dao *mongoPostDAO) ListByUserID(ctx context.Context, id primitive.ObjectID, limit, skip int64) ([]*Post, error) {
+	o := options.Find().SetLimit(limit).SetSkip(skip)
+
+	cursor, err := dao.collection.Find(ctx, bson.M{"_id": id}, o)
+	if err != nil {
+		return nil, err
+	}
+
+	posts := make([]*Post, 0)
+	for cursor.Next(ctx) {
+		var post Post
+		if err := cursor.Decode(&post); err != nil {
+			return nil, err
+		}
+
+		posts = append(posts, &post)
+	}
+
+	return posts, nil
+}
+
 func (dao *mongoPostDAO) Create(ctx context.Context, post *Post) (primitive.ObjectID, error) {
 	result, err := dao.collection.InsertOne(ctx, post)
 	if err != nil {

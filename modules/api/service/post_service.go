@@ -16,16 +16,17 @@ type user_service struct {
 	postDAO dao.PostDAO
 }
 
-func NewService(postDAO dao.PostDAO) *user_service {
+func NewService(postDAO dao.PostDAO, userDAO dao.UserDAO) *user_service {
 	return &user_service{
 		postDAO: postDAO,
+		userDAO: userDAO,
 	}
 }
 
 func (s *user_service) GetPost(ctx context.Context, req *pb.GetPostRequest) (*pb.GetPostResponse, error) {
 	postID, err := primitive.ObjectIDFromHex(req.GetId())
 	if err != nil {
-		return nil, ErrInvalidUUID
+		return nil, ErrInvalidObjectID
 	}
 
 	post, err := s.postDAO.Get(ctx, postID)
@@ -60,10 +61,34 @@ func (s *user_service) ListPost(ctx context.Context, req *pb.ListPostRequest) (*
 	return &pb.ListPostResponse{Posts: pbPosts}, nil
 }
 
+func (s *user_service) ListPostByUserID(ctx context.Context, req *pb.ListPostByUserIDRequest) (*pb.ListPostByUserIDResponse, error) {
+	userID, err := primitive.ObjectIDFromHex(req.Id)
+	if err != nil {
+		return nil, ErrInvalidObjectID
+	}
+
+	posts, err := s.postDAO.ListByUserID(ctx, userID, req.Limit, req.Skip)
+	if err != nil {
+		return nil, err
+	}
+
+	pbPosts := make([]*pb.PostInfo, 0, len(posts))
+	for _, post := range posts {
+		user, err := s.userDAO.Get(ctx, post.UserID)
+		if err != nil {
+			return nil, err
+		}
+
+		pbPosts = append(pbPosts, post.ToProto(user.Name))
+	}
+
+	return &pb.ListPostByUserIDResponse{Posts: pbPosts}, nil
+}
+
 func (s *user_service) CreatePost(ctx context.Context, req *pb.CreatePostRequest) (*pb.CreatePostResponse, error) {
 	userID, err := primitive.ObjectIDFromHex(req.UserId)
 	if err != nil {
-		return nil, ErrInvalidUUID
+		return nil, ErrInvalidObjectID
 	}
 
 	post := &dao.Post{
@@ -86,7 +111,7 @@ func (s *user_service) CreatePost(ctx context.Context, req *pb.CreatePostRequest
 func (s *user_service) UpdateContent(ctx context.Context, req *pb.UpdatePostContentRequest) (*pb.UpdatePostContentResponse, error) {
 	userID, err := primitive.ObjectIDFromHex(req.Id)
 	if err != nil {
-		return nil, ErrInvalidUUID
+		return nil, ErrInvalidObjectID
 	}
 
 	post := &dao.Post{
@@ -110,7 +135,7 @@ func (s *user_service) UpdateContent(ctx context.Context, req *pb.UpdatePostCont
 func (s *user_service) UpdateLikes(ctx context.Context, req *pb.UpdatePostLikesRequest) (*pb.UpdatePostLikesResponse, error) {
 	userID, err := primitive.ObjectIDFromHex(req.Id)
 	if err != nil {
-		return nil, ErrInvalidUUID
+		return nil, ErrInvalidObjectID
 	}
 
 	if err := s.postDAO.UpdateLikes(ctx, userID); err != nil {
@@ -127,7 +152,7 @@ func (s *user_service) UpdateLikes(ctx context.Context, req *pb.UpdatePostLikesR
 func (s *user_service) UpdateViews(ctx context.Context, req *pb.UpdatePostViewsRequest) (*pb.UpdatePostViewsResponse, error) {
 	userID, err := primitive.ObjectIDFromHex(req.Id)
 	if err != nil {
-		return nil, ErrInvalidUUID
+		return nil, ErrInvalidObjectID
 	}
 
 	if err := s.postDAO.UpdateViews(ctx, userID); err != nil {
@@ -144,7 +169,7 @@ func (s *user_service) UpdateViews(ctx context.Context, req *pb.UpdatePostViewsR
 func (s *user_service) DeletePost(ctx context.Context, req *pb.DeletePostRequest) (*pb.DeletePostResponse, error) {
 	userID, err := primitive.ObjectIDFromHex(req.Id)
 	if err != nil {
-		return nil, ErrInvalidUUID
+		return nil, ErrInvalidObjectID
 	}
 
 	if err := s.postDAO.Delete(ctx, userID); err != nil {
