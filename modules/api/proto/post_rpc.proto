@@ -2,10 +2,10 @@ syntax = "proto3";
 
 package pb;
 
-option go_package = "/pb";
-
 import "google/api/annotations.proto";
 import "modules/api/proto/post_message.proto";
+
+option go_package = "/pb";
 
 service Post {
     rpc GetPost(GetPostRequest) returns (GetPostResponse) {

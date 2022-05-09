@@ -67,10 +67,16 @@ func (dao *mongoUserDAO) Create(ctx context.Context, user *User) error {
 }
 
 func (dao *mongoUserDAO) Update(ctx context.Context, user *User) error {
-	if result, err := dao.collection.ReplaceOne(
+	if result, err := dao.collection.UpdateByID(
 		ctx,
-		bson.M{"_id": user.ID},
-		user,
+		user.ID,
+		bson.M{
+			"$set": bson.M{
+				"name":        user.Name,
+				"description": user.Description,
+				"avator":      user.Avator,
+			},
+		},
 	); err != nil {
 		return err
 	} else if result.ModifiedCount == 0 {
