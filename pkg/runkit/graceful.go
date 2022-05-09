@@ -19,7 +19,7 @@ var (
 	ErrGracefullyTimeout = errors.New("gracefully shutdown timeout")
 )
 
-func GracefunRun(fn GracefulRunFunc, conf *GracefulConfig) error {
+func GracefulRun(fn GracefulRunFunc, conf *GracefulConfig) error {
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 
