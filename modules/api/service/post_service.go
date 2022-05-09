@@ -73,13 +73,19 @@ func (s *user_service) ListPostByUserID(ctx context.Context, req *pb.ListPostByU
 	}
 
 	pbPosts := make([]*pb.PostInfo, 0, len(posts))
-	for _, post := range posts {
-		user, err := s.userDAO.Get(ctx, post.UserID)
+
+	var userName string
+	if len(posts) > 0 {
+		user, err := s.userDAO.Get(ctx, posts[0].UserID)
 		if err != nil {
 			return nil, err
 		}
 
-		pbPosts = append(pbPosts, post.ToProto(user.Name))
+		userName = user.Name
+	}
+
+	for _, post := range posts {
+		pbPosts = append(pbPosts, post.ToProto(userName))
 	}
 
 	return &pb.ListPostByUserIDResponse{Posts: pbPosts}, nil
