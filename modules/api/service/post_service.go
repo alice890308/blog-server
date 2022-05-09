@@ -80,7 +80,7 @@ func (s *user_service) CreatePost(ctx context.Context, req *pb.CreatePostRequest
 		return nil, err
 	}
 
-	return &pb.CreatePostResponse{Id: result.ID.Hex()}, nil
+	return &pb.CreatePostResponse{Id: result.Hex()}, nil
 }
 
 func (s *user_service) UpdateContent(ctx context.Context, req *pb.UpdatePostContentRequest) (*pb.UpdatePostContentResponse, error) {

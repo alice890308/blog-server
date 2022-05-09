@@ -51,15 +51,15 @@ func (dao *mongoPostDAO) List(ctx context.Context, limit, skip int64) ([]*Post, 
 	return posts, nil
 }
 
-func (dao *mongoPostDAO) Create(ctx context.Context, post *Post) (*Post, error) {
+func (dao *mongoPostDAO) Create(ctx context.Context, post *Post) (primitive.ObjectID, error) {
 	result, err := dao.collection.InsertOne(ctx, post)
 	if err != nil {
-		return nil, err
+		return primitive.NilObjectID, err
 	}
 
 	post.ID = result.InsertedID.(primitive.ObjectID)
 
-	return post, nil
+	return post.ID, nil
 }
 
 func (dao *mongoPostDAO) UpdateContent(ctx context.Context, post *Post) error {
