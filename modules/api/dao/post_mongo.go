@@ -16,6 +16,12 @@ type mongoPostDAO struct {
 
 var _ PostDAO = (*mongoPostDAO)(nil)
 
+func NewMongoPostDAO(collection *mongo.Collection) *mongoPostDAO {
+	return &mongoPostDAO{
+		collection: collection,
+	}
+}
+
 func (dao *mongoPostDAO) Get(ctx context.Context, id primitive.ObjectID) (*Post, error) {
 	var post Post
 

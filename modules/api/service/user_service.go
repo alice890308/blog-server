@@ -10,19 +10,7 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-type userService struct {
-	pb.UnimplementedUserServer
-
-	UserDAO dao.UserDAO
-}
-
-func NewUserService(userDAO dao.UserDAO) *userService {
-	return &userService{
-		UserDAO: userDAO,
-	}
-}
-
-func (s *userService) CreateUser(ctx context.Context, req *pb.CreateUserRequest) (*pb.CreateUserResponse, error) {
+func (s *Service) CreateUser(ctx context.Context, req *pb.CreateUserRequest) (*pb.CreateUserResponse, error) {
 	hashedPWD, err := bcrypt.GenerateFromPassword([]byte(req.GetPassword()), bcrypt.DefaultCost)
 	if err != nil {
 		return nil, ErrToHashPWD
@@ -33,7 +21,7 @@ func (s *userService) CreateUser(ctx context.Context, req *pb.CreateUserRequest)
 		Password: string(hashedPWD),
 	}
 
-	err = s.UserDAO.Create(ctx, user)
+	err = s.userDAO.Create(ctx, user)
 	if err != nil {
 		return nil, err
 	}
@@ -41,13 +29,13 @@ func (s *userService) CreateUser(ctx context.Context, req *pb.CreateUserRequest)
 	return &pb.CreateUserResponse{}, nil
 }
 
-func (s *userService) GetUser(ctx context.Context, req *pb.GetUserRequest) (*pb.GetUserResponse, error) {
+func (s *Service) GetUser(ctx context.Context, req *pb.GetUserRequest) (*pb.GetUserResponse, error) {
 	id, err := primitive.ObjectIDFromHex(req.GetId())
 	if err != nil {
 		return nil, ErrInvalidObjectID
 	}
 
-	user, err := s.UserDAO.Get(ctx, id)
+	user, err := s.userDAO.Get(ctx, id)
 	if err != nil {
 		if errors.Is(err, dao.ErrUserNotFound) {
 			return nil, ErrUserNotFound
@@ -59,8 +47,8 @@ func (s *userService) GetUser(ctx context.Context, req *pb.GetUserRequest) (*pb.
 	return &pb.GetUserResponse{User: user.ToProto()}, nil
 }
 
-func (s *userService) ListUser(ctx context.Context, req *pb.ListUserRequest) (*pb.ListUserResponse, error) {
-	users, err := s.UserDAO.List(ctx, req.GetLimit(), req.GetSkip())
+func (s *Service) ListUser(ctx context.Context, req *pb.ListUserRequest) (*pb.ListUserResponse, error) {
+	users, err := s.userDAO.List(ctx, req.GetLimit(), req.GetSkip())
 	if err != nil {
 		return nil, err
 	}
@@ -73,7 +61,7 @@ func (s *userService) ListUser(ctx context.Context, req *pb.ListUserRequest) (*p
 	return &pb.ListUserResponse{Users: pbUsers}, nil
 }
 
-func (s *userService) UpdateUser(ctx context.Context, req *pb.UpdateUserRequest) (*pb.UpdateUserResponse, error) {
+func (s *Service) UpdateUser(ctx context.Context, req *pb.UpdateUserRequest) (*pb.UpdateUserResponse, error) {
 	id, err := primitive.ObjectIDFromHex(req.GetId())
 	if err != nil {
 		return nil, ErrInvalidObjectID
@@ -86,7 +74,7 @@ func (s *userService) UpdateUser(ctx context.Context, req *pb.UpdateUserRequest)
 		Avator:      req.GetAvator(),
 	}
 
-	err = s.UserDAO.Update(ctx, user)
+	err = s.userDAO.Update(ctx, user)
 	if err != nil {
 		if errors.Is(err, dao.ErrUserNotFound) {
 			return nil, ErrUserNotFound
@@ -98,13 +86,13 @@ func (s *userService) UpdateUser(ctx context.Context, req *pb.UpdateUserRequest)
 	return &pb.UpdateUserResponse{}, nil
 }
 
-func (s *userService) DeleteUser(ctx context.Context, req *pb.DeleteUserRequest) (*pb.DeleteUserResponse, error) {
+func (s *Service) DeleteUser(ctx context.Context, req *pb.DeleteUserRequest) (*pb.DeleteUserResponse, error) {
 	id, err := primitive.ObjectIDFromHex(req.GetId())
 	if err != nil {
 		return nil, ErrInvalidObjectID
 	}
 
-	if err := s.UserDAO.Delete(ctx, id); err != nil {
+	if err := s.userDAO.Delete(ctx, id); err != nil {
 		if errors.Is(err, dao.ErrUserNotFound) {
 			return nil, ErrUserNotFound
 		}

@@ -9,21 +9,7 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
-type user_service struct {
-	pb.UnimplementedPostServer
-
-	userDAO dao.UserDAO
-	postDAO dao.PostDAO
-}
-
-func NewService(postDAO dao.PostDAO, userDAO dao.UserDAO) *user_service {
-	return &user_service{
-		postDAO: postDAO,
-		userDAO: userDAO,
-	}
-}
-
-func (s *user_service) GetPost(ctx context.Context, req *pb.GetPostRequest) (*pb.GetPostResponse, error) {
+func (s *Service) GetPost(ctx context.Context, req *pb.GetPostRequest) (*pb.GetPostResponse, error) {
 	postID, err := primitive.ObjectIDFromHex(req.GetId())
 	if err != nil {
 		return nil, ErrInvalidObjectID
@@ -42,7 +28,7 @@ func (s *user_service) GetPost(ctx context.Context, req *pb.GetPostRequest) (*pb
 	return &pb.GetPostResponse{Post: post.ToProto(user.Name)}, nil
 }
 
-func (s *user_service) ListPost(ctx context.Context, req *pb.ListPostRequest) (*pb.ListPostResponse, error) {
+func (s *Service) ListPost(ctx context.Context, req *pb.ListPostRequest) (*pb.ListPostResponse, error) {
 	posts, err := s.postDAO.List(ctx, int64(req.GetLimit()), int64(req.GetSkip()))
 	if err != nil {
 		return nil, err
@@ -61,7 +47,7 @@ func (s *user_service) ListPost(ctx context.Context, req *pb.ListPostRequest) (*
 	return &pb.ListPostResponse{Posts: pbPosts}, nil
 }
 
-func (s *user_service) ListPostByUserID(ctx context.Context, req *pb.ListPostByUserIDRequest) (*pb.ListPostByUserIDResponse, error) {
+func (s *Service) ListPostByUserID(ctx context.Context, req *pb.ListPostByUserIDRequest) (*pb.ListPostByUserIDResponse, error) {
 	userID, err := primitive.ObjectIDFromHex(req.Id)
 	if err != nil {
 		return nil, ErrInvalidObjectID
@@ -91,7 +77,7 @@ func (s *user_service) ListPostByUserID(ctx context.Context, req *pb.ListPostByU
 	return &pb.ListPostByUserIDResponse{Posts: pbPosts}, nil
 }
 
-func (s *user_service) CreatePost(ctx context.Context, req *pb.CreatePostRequest) (*pb.CreatePostResponse, error) {
+func (s *Service) CreatePost(ctx context.Context, req *pb.CreatePostRequest) (*pb.CreatePostResponse, error) {
 	userID, err := primitive.ObjectIDFromHex(req.UserId)
 	if err != nil {
 		return nil, ErrInvalidObjectID
@@ -114,7 +100,7 @@ func (s *user_service) CreatePost(ctx context.Context, req *pb.CreatePostRequest
 	return &pb.CreatePostResponse{Id: result.Hex()}, nil
 }
 
-func (s *user_service) UpdateContent(ctx context.Context, req *pb.UpdatePostContentRequest) (*pb.UpdatePostContentResponse, error) {
+func (s *Service) UpdateContent(ctx context.Context, req *pb.UpdatePostContentRequest) (*pb.UpdatePostContentResponse, error) {
 	userID, err := primitive.ObjectIDFromHex(req.Id)
 	if err != nil {
 		return nil, ErrInvalidObjectID
@@ -138,7 +124,7 @@ func (s *user_service) UpdateContent(ctx context.Context, req *pb.UpdatePostCont
 	return &pb.UpdatePostContentResponse{}, nil
 }
 
-func (s *user_service) UpdateLikes(ctx context.Context, req *pb.UpdatePostLikesRequest) (*pb.UpdatePostLikesResponse, error) {
+func (s *Service) UpdateLikes(ctx context.Context, req *pb.UpdatePostLikesRequest) (*pb.UpdatePostLikesResponse, error) {
 	userID, err := primitive.ObjectIDFromHex(req.Id)
 	if err != nil {
 		return nil, ErrInvalidObjectID
@@ -155,7 +141,7 @@ func (s *user_service) UpdateLikes(ctx context.Context, req *pb.UpdatePostLikesR
 	return &pb.UpdatePostLikesResponse{}, nil
 }
 
-func (s *user_service) UpdateViews(ctx context.Context, req *pb.UpdatePostViewsRequest) (*pb.UpdatePostViewsResponse, error) {
+func (s *Service) UpdateViews(ctx context.Context, req *pb.UpdatePostViewsRequest) (*pb.UpdatePostViewsResponse, error) {
 	userID, err := primitive.ObjectIDFromHex(req.Id)
 	if err != nil {
 		return nil, ErrInvalidObjectID
@@ -172,7 +158,7 @@ func (s *user_service) UpdateViews(ctx context.Context, req *pb.UpdatePostViewsR
 	return &pb.UpdatePostViewsResponse{}, nil
 }
 
-func (s *user_service) DeletePost(ctx context.Context, req *pb.DeletePostRequest) (*pb.DeletePostResponse, error) {
+func (s *Service) DeletePost(ctx context.Context, req *pb.DeletePostRequest) (*pb.DeletePostResponse, error) {
 	userID, err := primitive.ObjectIDFromHex(req.Id)
 	if err != nil {
 		return nil, ErrInvalidObjectID
