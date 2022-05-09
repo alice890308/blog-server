@@ -2,7 +2,7 @@
 // versions:
 // - protoc-gen-go-grpc v1.2.0
 // - protoc             v3.19.3
-// source: modules/api/pb/post_rpc.proto
+// source: modules/api/proto/post_rpc.proto
 
 package pb
 
@@ -281,5 +281,5 @@ var Post_ServiceDesc = grpc.ServiceDesc{
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "modules/api/pb/post_rpc.proto",
+	Metadata: "modules/api/proto/post_rpc.proto",
 }

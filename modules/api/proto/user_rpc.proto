@@ -1,0 +1,48 @@
+syntax = "proto3";
+
+package pb;
+
+import "google/api/annotations.proto";
+import "modules/api/proto/user_message.proto";
+
+option go_package = "/pb";
+
+service User {
+    rpc CreateUser(CreateUserRequest) returns (CreateUserResponse) {
+        option (google.api.http) = {
+            post: "/users"
+            body: "*"
+			response_body: "*"
+        };
+    }
+
+    rpc GetUser(GetUserRequest) returns (GetUserResponse) {
+        option (google.api.http) = {
+            get: "/users/{id}"
+            response_body: "*"
+        };
+    }
+
+    rpc ListUser(ListUserRequest) returns (ListUserResponse) {
+        option (google.api.http) = {
+            get: "/users"
+            response_body: "*"
+        };
+    }
+
+    rpc UpdateUser(UpdateUserRequest) returns (UpdateUserResponse) {
+        option (google.api.http) = {
+            put: "/users/{id}"
+            body: "*"
+            response_body: "*"
+        };
+    }
+
+    rpc DeleteUser(DeleteUserRequest) returns (DeleteUserResponse) {
+        option (google.api.http) = {
+            delete: "/users/{id}"
+            response_body: "*"
+        };
+    }
+}
+
