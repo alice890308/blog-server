@@ -5,7 +5,7 @@ package pb;
 import "google/api/annotations.proto";
 import "modules/api/proto/user_message.proto";
 
-option go_package = "github.com/alice890308/blog-server/modules/api/pb";
+option go_package = "/pb";
 
 service User {
     rpc CreateUser(CreateUserRequest) returns (CreateUserResponse) {

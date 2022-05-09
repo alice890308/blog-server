@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package pb;
 
-option go_package = "github.com/alice890308/blog-server/modules/api/pb";
+option go_package = "/pb";
 
 import "google/protobuf/timestamp.proto";
 
