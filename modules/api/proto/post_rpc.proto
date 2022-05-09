@@ -32,7 +32,7 @@ service Post {
 
     rpc UpdatePostContent(UpdatePostContentRequest) returns (UpdatePostContentResponse) {
         option (google.api.http) = {
-            put: "/posts/updateContent"
+            put: "/posts/updateContent/{id}"
             body: "*"
             response_body: "*"
         };
@@ -40,7 +40,7 @@ service Post {
 
     rpc UpdatePostLikes(UpdatePostLikesRequest) returns (UpdatePostLikesResponse) {
         option (google.api.http) = {
-            put: "/posts/updateLikes"
+            put: "/posts/updateLikes/{id}"
             body: "*"
             response_body: "*"
         };

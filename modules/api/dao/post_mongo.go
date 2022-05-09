@@ -51,26 +51,26 @@ func (dao *mongoPostDAO) List(ctx context.Context, limit, skip int64) ([]*Post, 
 	return posts, nil
 }
 
-func (dao *mongoPostDAO) Create(ctx context.Context, post *Post) error {
+func (dao *mongoPostDAO) Create(ctx context.Context, post *Post) (*Post, error) {
 	result, err := dao.collection.InsertOne(ctx, post)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	post.ID = result.InsertedID.(primitive.ObjectID)
 
-	return nil
+	return post, nil
 }
 
-func (dao *mongoPostDAO) Update(ctx context.Context, post *Post) error {
+func (dao *mongoPostDAO) Update(ctx context.Context, post *Post) (*Post, error) {
 	if result, err := dao.collection.ReplaceOne(
 		ctx,
 		bson.M{"_id": post.ID},
 		post,
 	); err != nil {
-		return err
+		return nil, err
 	} else if result.ModifiedCount == 0 {
-		return ErrPostNotFound
+		return nil, ErrPostNotFound
 	}
 
 	return nil
