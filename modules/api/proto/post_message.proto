@@ -9,15 +9,15 @@ import "google/protobuf/timestamp.proto";
 message PostInfo {
     string id = 1;
     string user_id = 2;
-    string title = 3;
-    string content = 4;
-    uint32 views = 5;
-    uint32 likes = 6;
-    string image = 7;
-    repeated string tags = 8;
-    google.protobuf.Timestamp created_at = 9;
-    google.protobuf.Timestamp updated_at = 10;
-    google.protobuf.Timestamp deleted_at = 11;
+    string user_name = 3;
+    string title = 4;
+    string content = 5;
+    uint32 views = 6;
+    uint32 likes = 7;
+    string image = 8;
+    repeated string tags = 10;
+    google.protobuf.Timestamp created_at = 11;
+    google.protobuf.Timestamp updated_at = 12;
 }
 
 message GetPostRequest {
@@ -35,6 +35,16 @@ message ListPostRequest {
 }
 
 message ListPostResponse {
+    repeated PostInfo posts = 1;
+}
+
+message ListPostByUserIDRequest {
+    string id = 1;
+    int64 limit = 2;
+    int64 skip = 3;
+}
+
+message ListPostByUserIDResponse {
     repeated PostInfo posts = 1;
 }
 
@@ -60,10 +70,15 @@ message UpdatePostContentResponse {}
 
 message UpdatePostLikesRequest {
     string id = 1;
-    uint32 likes = 2;
 }
 
 message UpdatePostLikesResponse {}
+
+message UpdatePostViewsRequest {
+    string id = 1;
+}
+
+message UpdatePostViewsResponse {}
 
 message DeletePostRequest {
     string id = 1;

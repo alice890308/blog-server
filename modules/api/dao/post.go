@@ -5,7 +5,9 @@ import (
 	"errors"
 	"time"
 
+	"github.com/alice890308/blog-server/modules/api/pb"
 	"go.mongodb.org/mongo-driver/bson/primitive"
+	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
 type Post struct {
@@ -22,11 +24,30 @@ type Post struct {
 	DeletedAT time.Time          `bson:"deleted_at,omitempty"`
 }
 
+func (p *Post) ToProto(userName string) *pb.PostInfo {
+	return &pb.PostInfo{
+		Id:        p.ID.Hex(),
+		UserId:    p.UserID.Hex(),
+		UserName:  userName,
+		Title:     p.Title,
+		Content:   p.Content,
+		Views:     uint32(p.Views),
+		Likes:     uint32(p.Likes),
+		Tags:      p.Tags,
+		Image:     p.Image,
+		CreatedAt: timestamppb.New(p.CreatedAT),
+		UpdatedAt: timestamppb.New(p.UpdatedAT),
+	}
+}
+
 type PostDAO interface {
 	Get(ctx context.Context, id primitive.ObjectID) (*Post, error)
 	List(ctx context.Context, limit, skip int64) ([]*Post, error)
-	Create(ctx context.Context, post *Post) error
-	Update(ctx context.Context, post *Post) error
+	ListByUserID(ctx context.Context, id primitive.ObjectID, limit, skip int64) ([]*Post, error)
+	Create(ctx context.Context, post *Post) (primitive.ObjectID, error)
+	UpdateContent(ctx context.Context, post *Post) error
+	UpdateLikes(ctx context.Context, id primitive.ObjectID) error
+	UpdateViews(ctx context.Context, id primitive.ObjectID) error
 	Delete(ctx context.Context, id primitive.ObjectID) error
 }
 
