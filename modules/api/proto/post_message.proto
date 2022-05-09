@@ -64,6 +64,12 @@ message UpdatePostLikesRequest {
 
 message UpdatePostLikesResponse {}
 
+message UpdatePostViewsRequest {
+    string id = 1;
+}
+
+message UpdatePostViewsResponse {}
+
 message DeletePostRequest {
     string id = 1;
 }

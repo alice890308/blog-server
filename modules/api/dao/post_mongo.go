@@ -100,6 +100,24 @@ func (dao *mongoPostDAO) UpdateLikes(ctx context.Context, id primitive.ObjectID)
 	return nil
 }
 
+func (dao *mongoPostDAO) UpdateViews(ctx context.Context, id primitive.ObjectID) error {
+	if result, err := dao.collection.UpdateOne(
+		ctx,
+		bson.M{"_id": id},
+		bson.M{
+			"$inc": bson.M{
+				"views": 1,
+			},
+		},
+	); err != nil {
+		return err
+	} else if result.ModifiedCount == 0 {
+		return ErrPostNotFound
+	}
+
+	return nil
+}
+
 func (dao *mongoPostDAO) Delete(ctx context.Context, id primitive.ObjectID) error {
 	if result, err := dao.collection.DeleteOne(ctx, bson.M{"_id": id}); err != nil {
 		return err

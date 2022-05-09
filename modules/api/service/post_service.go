@@ -124,6 +124,23 @@ func (s *user_service) UpdateLikes(ctx context.Context, req *pb.UpdatePostLikesR
 	return &pb.UpdatePostLikesResponse{}, nil
 }
 
+func (s *user_service) UpdateViews(ctx context.Context, req *pb.UpdatePostViewsRequest) (*pb.UpdatePostViewsResponse, error) {
+	userID, err := primitive.ObjectIDFromHex(req.Id)
+	if err != nil {
+		return nil, ErrInvalidUUID
+	}
+
+	if err := s.postDAO.UpdateViews(ctx, userID); err != nil {
+		if errors.Is(err, dao.ErrPostNotFound) {
+			return nil, ErrPostNotFound
+		}
+
+		return nil, err
+	}
+
+	return &pb.UpdatePostViewsResponse{}, nil
+}
+
 func (s *user_service) DeletePost(ctx context.Context, req *pb.DeletePostRequest) (*pb.DeletePostResponse, error) {
 	userID, err := primitive.ObjectIDFromHex(req.Id)
 	if err != nil {

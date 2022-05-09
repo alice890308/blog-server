@@ -27,6 +27,7 @@ type PostClient interface {
 	CreatePost(ctx context.Context, in *CreatePostRequest, opts ...grpc.CallOption) (*CreatePostResponse, error)
 	UpdatePostContent(ctx context.Context, in *UpdatePostContentRequest, opts ...grpc.CallOption) (*UpdatePostContentResponse, error)
 	UpdatePostLikes(ctx context.Context, in *UpdatePostLikesRequest, opts ...grpc.CallOption) (*UpdatePostLikesResponse, error)
+	UpdatePostViews(ctx context.Context, in *UpdatePostViewsRequest, opts ...grpc.CallOption) (*UpdatePostViewsResponse, error)
 	DeletePost(ctx context.Context, in *DeletePostRequest, opts ...grpc.CallOption) (*DeletePostResponse, error)
 }
 
@@ -83,6 +84,15 @@ func (c *postClient) UpdatePostLikes(ctx context.Context, in *UpdatePostLikesReq
 	return out, nil
 }
 
+func (c *postClient) UpdatePostViews(ctx context.Context, in *UpdatePostViewsRequest, opts ...grpc.CallOption) (*UpdatePostViewsResponse, error) {
+	out := new(UpdatePostViewsResponse)
+	err := c.cc.Invoke(ctx, "/pb.Post/UpdatePostViews", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *postClient) DeletePost(ctx context.Context, in *DeletePostRequest, opts ...grpc.CallOption) (*DeletePostResponse, error) {
 	out := new(DeletePostResponse)
 	err := c.cc.Invoke(ctx, "/pb.Post/DeletePost", in, out, opts...)
@@ -101,6 +111,7 @@ type PostServer interface {
 	CreatePost(context.Context, *CreatePostRequest) (*CreatePostResponse, error)
 	UpdatePostContent(context.Context, *UpdatePostContentRequest) (*UpdatePostContentResponse, error)
 	UpdatePostLikes(context.Context, *UpdatePostLikesRequest) (*UpdatePostLikesResponse, error)
+	UpdatePostViews(context.Context, *UpdatePostViewsRequest) (*UpdatePostViewsResponse, error)
 	DeletePost(context.Context, *DeletePostRequest) (*DeletePostResponse, error)
 	mustEmbedUnimplementedPostServer()
 }
@@ -123,6 +134,9 @@ func (UnimplementedPostServer) UpdatePostContent(context.Context, *UpdatePostCon
 }
 func (UnimplementedPostServer) UpdatePostLikes(context.Context, *UpdatePostLikesRequest) (*UpdatePostLikesResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdatePostLikes not implemented")
+}
+func (UnimplementedPostServer) UpdatePostViews(context.Context, *UpdatePostViewsRequest) (*UpdatePostViewsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdatePostViews not implemented")
 }
 func (UnimplementedPostServer) DeletePost(context.Context, *DeletePostRequest) (*DeletePostResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeletePost not implemented")
@@ -230,6 +244,24 @@ func _Post_UpdatePostLikes_Handler(srv interface{}, ctx context.Context, dec fun
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Post_UpdatePostViews_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdatePostViewsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(PostServer).UpdatePostViews(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/pb.Post/UpdatePostViews",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(PostServer).UpdatePostViews(ctx, req.(*UpdatePostViewsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _Post_DeletePost_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(DeletePostRequest)
 	if err := dec(in); err != nil {
@@ -274,6 +306,10 @@ var Post_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "UpdatePostLikes",
 			Handler:    _Post_UpdatePostLikes_Handler,
+		},
+		{
+			MethodName: "UpdatePostViews",
+			Handler:    _Post_UpdatePostViews_Handler,
 		},
 		{
 			MethodName: "DeletePost",

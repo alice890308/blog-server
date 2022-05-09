@@ -46,6 +46,7 @@ type PostDAO interface {
 	Create(ctx context.Context, post *Post) (primitive.ObjectID, error)
 	UpdateContent(ctx context.Context, post *Post) error
 	UpdateLikes(ctx context.Context, id primitive.ObjectID) error
+	UpdateViews(ctx context.Context, id primitive.ObjectID) error
 	Delete(ctx context.Context, id primitive.ObjectID) error
 }
 

@@ -41,7 +41,13 @@ service Post {
     rpc UpdatePostLikes(UpdatePostLikesRequest) returns (UpdatePostLikesResponse) {
         option (google.api.http) = {
             put: "/posts/likes/{id}"
-            body: "*"
+            response_body: "*"
+        };
+    }
+
+    rpc UpdatePostViews(UpdatePostViewsRequest) returns (UpdatePostViewsResponse) {
+        option (google.api.http) = {
+            put: "/posts/views/{id}"
             response_body: "*"
         };
     }
