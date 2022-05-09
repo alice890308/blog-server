@@ -24,6 +24,9 @@ func NewService(userDAO dao.UserDAO) *service {
 
 func (s *service) CreateUser(ctx context.Context, req *pb.CreateUserRequest) (*pb.CreateUserResponse, error) {
 	hashedPWD, err := bcrypt.GenerateFromPassword([]byte(req.GetPassword()), bcrypt.DefaultCost)
+	if err != nil {
+		return nil, ErrToHashPWD
+	}
 	user := &dao.User{
 		Name:     req.GetUserName(),
 		Account:  req.GetUserAccount(),
