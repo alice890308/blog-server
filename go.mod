@@ -4,7 +4,6 @@ go 1.18
 
 require (
 	github.com/go-redis/redis/v8 v8.11.5
-	github.com/google/uuid v1.1.2
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.10.0
 	go.mongodb.org/mongo-driver v1.9.1
 	go.uber.org/zap v1.21.0
