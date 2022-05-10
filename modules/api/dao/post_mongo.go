@@ -57,10 +57,10 @@ func (dao *mongoPostDAO) List(ctx context.Context, limit, skip int64) ([]*Post, 
 	return posts, nil
 }
 
-func (dao *mongoPostDAO) ListByUserID(ctx context.Context, id primitive.ObjectID, limit, skip int64) ([]*Post, error) {
+func (dao *mongoPostDAO) ListByUserID(ctx context.Context, user_id primitive.ObjectID, limit, skip int64) ([]*Post, error) {
 	o := options.Find().SetLimit(limit).SetSkip(skip)
 
-	cursor, err := dao.collection.Find(ctx, bson.M{"_id": id}, o)
+	cursor, err := dao.collection.Find(ctx, bson.M{"user_id": user_id}, o)
 	if err != nil {
 		return nil, err
 	}

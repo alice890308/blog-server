@@ -48,7 +48,7 @@ func (s *Service) ListPost(ctx context.Context, req *pb.ListPostRequest) (*pb.Li
 }
 
 func (s *Service) ListPostByUserID(ctx context.Context, req *pb.ListPostByUserIDRequest) (*pb.ListPostByUserIDResponse, error) {
-	userID, err := primitive.ObjectIDFromHex(req.Id)
+	userID, err := primitive.ObjectIDFromHex(req.GetUserId())
 	if err != nil {
 		return nil, ErrInvalidObjectID
 	}
