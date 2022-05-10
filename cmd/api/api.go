@@ -69,7 +69,7 @@ func runAPI(_ *cobra.Command, _ []string) error {
 		}
 	}()
 
-	return runkit.GracefunRun(serveGRPC(lis, svc, logger), &args.GracefulConfig)
+	return runkit.GracefulRun(serveGRPC(lis, svc, logger), &args.GracefulConfig)
 }
 
 func serveGRPC(lis net.Listener, svc *service.Service, logger *logkit.Logger, opt ...grpc.ServerOption) runkit.GracefulRunFunc {

@@ -63,3 +63,18 @@ services:
     - api
     depends_on:
     - mongo
+
+  gateway:
+    image: tsw303005/blog-server:latest
+    environment:
+      GRPC_SERVER_ADDR: api:8081
+      <<: *common-env
+    command:
+    - /cmd
+    - api
+    - gateway
+    depends_on:
+    - mongo
+    - api
+    ports:
+    - 10081:8080

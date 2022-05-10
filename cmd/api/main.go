@@ -9,6 +9,6 @@ func NewAPICommand() *cobra.Command {
 	}
 
 	cmd.AddCommand(newAPICommand())
-
+	cmd.AddCommand(newGatewayCommand())
 	return cmd
 }
