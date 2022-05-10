@@ -77,4 +77,4 @@ services:
     - mongo
     - api
     ports:
-    - 10081:8080
+    - 8080:8080
