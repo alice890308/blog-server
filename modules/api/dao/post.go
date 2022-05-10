@@ -43,7 +43,7 @@ func (p *Post) ToProto(userName string) *pb.PostInfo {
 type PostDAO interface {
 	Get(ctx context.Context, id primitive.ObjectID) (*Post, error)
 	List(ctx context.Context, limit, skip int64) ([]*Post, error)
-	ListByUserID(ctx context.Context, id primitive.ObjectID, limit, skip int64) ([]*Post, error)
+	ListByUserID(ctx context.Context, user_id primitive.ObjectID, limit, skip int64) ([]*Post, error)
 	Create(ctx context.Context, post *Post) (primitive.ObjectID, error)
 	UpdateContent(ctx context.Context, post *Post) error
 	UpdateLikes(ctx context.Context, id primitive.ObjectID) error

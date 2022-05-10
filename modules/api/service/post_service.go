@@ -48,7 +48,7 @@ func (s *Service) ListPost(ctx context.Context, req *pb.ListPostRequest) (*pb.Li
 }
 
 func (s *Service) ListPostByUserID(ctx context.Context, req *pb.ListPostByUserIDRequest) (*pb.ListPostByUserIDResponse, error) {
-	userID, err := primitive.ObjectIDFromHex(req.Id)
+	userID, err := primitive.ObjectIDFromHex(req.GetUserId())
 	if err != nil {
 		return nil, ErrInvalidObjectID
 	}
@@ -100,7 +100,7 @@ func (s *Service) CreatePost(ctx context.Context, req *pb.CreatePostRequest) (*p
 	return &pb.CreatePostResponse{Id: result.Hex()}, nil
 }
 
-func (s *Service) UpdateContent(ctx context.Context, req *pb.UpdatePostContentRequest) (*pb.UpdatePostContentResponse, error) {
+func (s *Service) UpdatePostContent(ctx context.Context, req *pb.UpdatePostContentRequest) (*pb.UpdatePostContentResponse, error) {
 	userID, err := primitive.ObjectIDFromHex(req.Id)
 	if err != nil {
 		return nil, ErrInvalidObjectID
@@ -124,7 +124,7 @@ func (s *Service) UpdateContent(ctx context.Context, req *pb.UpdatePostContentRe
 	return &pb.UpdatePostContentResponse{}, nil
 }
 
-func (s *Service) UpdateLikes(ctx context.Context, req *pb.UpdatePostLikesRequest) (*pb.UpdatePostLikesResponse, error) {
+func (s *Service) UpdatePostLikes(ctx context.Context, req *pb.UpdatePostLikesRequest) (*pb.UpdatePostLikesResponse, error) {
 	userID, err := primitive.ObjectIDFromHex(req.Id)
 	if err != nil {
 		return nil, ErrInvalidObjectID
@@ -141,7 +141,7 @@ func (s *Service) UpdateLikes(ctx context.Context, req *pb.UpdatePostLikesReques
 	return &pb.UpdatePostLikesResponse{}, nil
 }
 
-func (s *Service) UpdateViews(ctx context.Context, req *pb.UpdatePostViewsRequest) (*pb.UpdatePostViewsResponse, error) {
+func (s *Service) UpdatePostViews(ctx context.Context, req *pb.UpdatePostViewsRequest) (*pb.UpdatePostViewsResponse, error) {
 	userID, err := primitive.ObjectIDFromHex(req.Id)
 	if err != nil {
 		return nil, ErrInvalidObjectID
