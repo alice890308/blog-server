@@ -39,3 +39,21 @@ services:
     command:
     - make
     - lint
+
+  build:
+    <<: *common-build
+    command:
+    - make
+    - build
+
+  api:
+    image: tsw303005/blog-server:latest
+    environment:
+      <<: *common-env
+      API_SEVER_ADDR: api:8081
+    command:
+    - /cmd
+    - api
+    - api
+    depends_on:
+    - mongo

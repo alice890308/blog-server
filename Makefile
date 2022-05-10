@@ -63,3 +63,17 @@ bin/protoc-gen-go-grpc: go.mod
 
 bin/protoc-gen-grpc-gateway: go.mod
 	go build -o $@ github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-grpc-gateway
+
+
+# build
+.PHONY: dc.image
+dc.image: dc.build
+	$(DOCKER_COMPOSE) build --force-rm image
+
+.PHONY: dc.build
+dc.build:
+	$(DOCKER_COMPOSE) run --rm build
+
+build:
+	mkdir -p ./bin/app
+	go build -o ./bin/app/cmd ./cmd/main.go
