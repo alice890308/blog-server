@@ -39,3 +39,27 @@ services:
     command:
     - make
     - lint
+
+  build:
+    <<: *common-build
+    command:
+    - make
+    - build
+  
+  image:
+    image: tsw303005/blog-server:latest
+    build:
+      context: .
+    environment:
+      <<: *common-env
+
+  api:
+    image: tsw303005/blog-server:latest
+    environment:
+      <<: *common-env
+    command:
+    - /cmd
+    - api
+    - api
+    depends_on:
+    - mongo
