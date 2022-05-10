@@ -26,7 +26,7 @@ func newAPICommand() *cobra.Command {
 }
 
 type APIArgs struct {
-	GRPCAddr              string `long:"grpc_addr" env:"RCPC_ADDR" default:"8081"`
+	GRPCAddr              string `long:"grpc_addr" env:"RCPC_ADDR" default:":8081"`
 	runkit.GracefulConfig `group:"graceful" namespace:"graceful" env-namespace:"GRACEFUL"`
 	logkit.LoggerConfig   `group:"logger" namespace:"logger" env-namespace:"LOGGER"`
 	mongokit.MongoConfig  `group:"mongo" namespace:"mongo" env-namespace:"MONGO"`
@@ -61,7 +61,7 @@ func runAPI(_ *cobra.Command, _ []string) error {
 	logger.Info("listen to gRPC addr", zap.String("grpc_addr", args.GRPCAddr))
 	lis, err := net.Listen("tcp", args.GRPCAddr)
 	if err != nil {
-		logger.Fatal("failed to list gRPC addr", zap.Error(err))
+		logger.Fatal("failed to listen gRPC addr", zap.Error(err))
 	}
 	defer func() {
 		if err := lis.Close(); err != nil {
