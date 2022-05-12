@@ -28,6 +28,8 @@ func (dao *mongoUserDAO) Get(ctx context.Context, id primitive.ObjectID) (*User,
 		if errors.Is(err, mongo.ErrNoDocuments) {
 			return nil, ErrUserNotFound
 		}
+
+		return nil, err
 	}
 
 	return &user, nil

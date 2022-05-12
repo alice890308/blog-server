@@ -83,6 +83,11 @@ func (s *Service) CreatePost(ctx context.Context, req *pb.CreatePostRequest) (*p
 		return nil, ErrInvalidObjectID
 	}
 
+	// check user exists
+	if _, err := s.userDAO.Get(ctx, userID); err != nil {
+		return nil, err
+	}
+
 	post := &dao.Post{
 		UserID:  userID,
 		Title:   req.Title,
@@ -101,13 +106,19 @@ func (s *Service) CreatePost(ctx context.Context, req *pb.CreatePostRequest) (*p
 }
 
 func (s *Service) UpdatePostContent(ctx context.Context, req *pb.UpdatePostContentRequest) (*pb.UpdatePostContentResponse, error) {
-	userID, err := primitive.ObjectIDFromHex(req.Id)
+	ID, err := primitive.ObjectIDFromHex(req.Id)
 	if err != nil {
 		return nil, ErrInvalidObjectID
 	}
 
+	// check if post exists
+	_, err = s.postDAO.Get(ctx, ID)
+	if err != nil {
+		return nil, err
+	}
+
 	post := &dao.Post{
-		ID:      userID,
+		ID:      ID,
 		Title:   req.Title,
 		Content: req.Content,
 		Tags:    req.Tags,
