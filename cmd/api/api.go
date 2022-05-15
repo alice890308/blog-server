@@ -8,6 +8,7 @@ import (
 	"github.com/alice890308/blog-server/modules/api/dao"
 	"github.com/alice890308/blog-server/modules/api/pb"
 	"github.com/alice890308/blog-server/modules/api/service"
+	"github.com/alice890308/blog-server/pkg/authkit"
 	"github.com/alice890308/blog-server/pkg/logkit"
 	"github.com/alice890308/blog-server/pkg/mongokit"
 	"github.com/alice890308/blog-server/pkg/runkit"
@@ -30,6 +31,7 @@ type APIArgs struct {
 	runkit.GracefulConfig `group:"graceful" namespace:"graceful" env-namespace:"GRACEFUL"`
 	logkit.LoggerConfig   `group:"logger" namespace:"logger" env-namespace:"LOGGER"`
 	mongokit.MongoConfig  `group:"mongo" namespace:"mongo" env-namespace:"MONGO"`
+	authkit.JWTConfig     `group:"jwt" namespace:"jwt" env-namespace:"JWT"`
 }
 
 func runAPI(_ *cobra.Command, _ []string) error {
@@ -56,7 +58,8 @@ func runAPI(_ *cobra.Command, _ []string) error {
 
 	postDAO := dao.NewMongoPostDAO(mongoClient.Database().Collection("posts"))
 	userDAO := dao.NewMongoUserDAO(mongoClient.Database().Collection("users"))
-	svc := service.NewService(postDAO, userDAO)
+	jwtManager := authkit.NewJWTManager(ctx, &args.JWTConfig)
+	svc := service.NewService(postDAO, userDAO, *jwtManager)
 
 	logger.Info("listen to gRPC addr", zap.String("grpc_addr", args.GRPCAddr))
 	lis, err := net.Listen("tcp", args.GRPCAddr)
