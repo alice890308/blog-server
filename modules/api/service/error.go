@@ -13,4 +13,5 @@ var (
 	ErrWrongPWD             = status.Errorf(codes.PermissionDenied, "wrong password")
 	ErrMetadataNotProivided = status.Errorf(codes.InvalidArgument, "meatadata not provided")
 	ErrWrongPWD             = status.Errorf(codes.PermissionDenied, "wrong password")
+	ErrUserAlreadyExists    = status.Errorf(codes.AlreadyExists, "user account already exists")
 )

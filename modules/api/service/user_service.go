@@ -12,6 +12,11 @@ import (
 )
 
 func (s *Service) CreateUser(ctx context.Context, req *pb.CreateUserRequest) (*pb.CreateUserResponse, error) {
+	// check if the user account already exists
+	_, err := s.userDAO.GetByUserAccount(ctx, req.GetUserAccount())
+	if err != ErrUserNotFound {
+		return nil, ErrUserAlreadyExists
+	}
 
 	hashedPWD, err := bcrypt.GenerateFromPassword([]byte(req.GetPassword()), bcrypt.DefaultCost)
 	if err != nil {
