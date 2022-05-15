@@ -26,7 +26,7 @@ type Post struct {
 
 func (p *Post) ToProto(userName string) *pb.PostInfo {
 	return &pb.PostInfo{
-		Id:        p.ID.Hex(),
+		PostId:    p.ID.Hex(),
 		UserId:    p.UserID.Hex(),
 		UserName:  userName,
 		Title:     p.Title,
@@ -48,7 +48,7 @@ type PostDAO interface {
 	UpdateContent(ctx context.Context, post *Post) error
 	UpdateLikes(ctx context.Context, id primitive.ObjectID) error
 	UpdateViews(ctx context.Context, id primitive.ObjectID) error
-	Delete(ctx context.Context, id primitive.ObjectID) error
+	Delete(ctx context.Context, id primitive.ObjectID, user_id primitive.ObjectID) error
 }
 
 var (

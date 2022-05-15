@@ -7,7 +7,7 @@ option go_package = "/pb";
 import "google/protobuf/timestamp.proto";
 
 message PostInfo {
-    string id = 1;
+    string post_id = 1;
     string user_id = 2;
     string user_name = 3;
     string title = 4;
@@ -21,7 +21,7 @@ message PostInfo {
 }
 
 message GetPostRequest {
-    string id = 1;
+    string post_id = 1;
 }
 
 message GetPostResponse {
@@ -50,17 +50,16 @@ message ListPostByUserIDResponse {
 
 message CreatePostRequest {
     string title = 1;
-    string user_id = 2;
-    string content = 3;
-    repeated string tags = 4;
+    string content = 2;
+    repeated string tags = 3;
 }
 
 message CreatePostResponse {
-    string id = 1;
+    string post_id = 1;
 }
 
 message UpdatePostContentRequest {
-    string id = 1;
+    string post_id = 1;
     string title = 2;
     string content = 3;
     repeated string tags = 4;
@@ -69,19 +68,19 @@ message UpdatePostContentRequest {
 message UpdatePostContentResponse {}
 
 message UpdatePostLikesRequest {
-    string id = 1;
+    string post_id = 1;
 }
 
 message UpdatePostLikesResponse {}
 
 message UpdatePostViewsRequest {
-    string id = 1;
+    string post_id = 1;
 }
 
 message UpdatePostViewsResponse {}
 
 message DeletePostRequest {
-    string id = 1;
+    string post_id = 1;
 }
 
 message DeletePostResponse {}

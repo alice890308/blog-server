@@ -18,7 +18,7 @@ service User {
 
     rpc GetUser(GetUserRequest) returns (GetUserResponse) {
         option (google.api.http) = {
-            get: "/users/{id}"
+            get: "/users/{user_id}"
             response_body: "*"
         };
     }
@@ -32,7 +32,7 @@ service User {
 
     rpc UpdateUser(UpdateUserRequest) returns (UpdateUserResponse) {
         option (google.api.http) = {
-            put: "/users/{id}"
+            put: "/users"
             body: "*"
             response_body: "*"
         };
@@ -40,7 +40,7 @@ service User {
 
     rpc DeleteUser(DeleteUserRequest) returns (DeleteUserResponse) {
         option (google.api.http) = {
-            delete: "/users/{id}"
+            delete: "/users"
             response_body: "*"
         };
     }

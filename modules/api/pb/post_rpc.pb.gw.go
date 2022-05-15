@@ -42,14 +42,14 @@ func request_Post_GetPost_0(ctx context.Context, marshaler runtime.Marshaler, cl
 		_   = err
 	)
 
-	val, ok = pathParams["id"]
+	val, ok = pathParams["post_id"]
 	if !ok {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "id")
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "post_id")
 	}
 
-	protoReq.Id, err = runtime.String(val)
+	protoReq.PostId, err = runtime.String(val)
 	if err != nil {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "id", err)
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "post_id", err)
 	}
 
 	msg, err := client.GetPost(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
@@ -68,14 +68,14 @@ func local_request_Post_GetPost_0(ctx context.Context, marshaler runtime.Marshal
 		_   = err
 	)
 
-	val, ok = pathParams["id"]
+	val, ok = pathParams["post_id"]
 	if !ok {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "id")
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "post_id")
 	}
 
-	protoReq.Id, err = runtime.String(val)
+	protoReq.PostId, err = runtime.String(val)
 	if err != nil {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "id", err)
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "post_id", err)
 	}
 
 	msg, err := server.GetPost(ctx, &protoReq)
@@ -242,14 +242,14 @@ func request_Post_UpdatePostContent_0(ctx context.Context, marshaler runtime.Mar
 		_   = err
 	)
 
-	val, ok = pathParams["id"]
+	val, ok = pathParams["post_id"]
 	if !ok {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "id")
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "post_id")
 	}
 
-	protoReq.Id, err = runtime.String(val)
+	protoReq.PostId, err = runtime.String(val)
 	if err != nil {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "id", err)
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "post_id", err)
 	}
 
 	msg, err := client.UpdatePostContent(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
@@ -276,14 +276,14 @@ func local_request_Post_UpdatePostContent_0(ctx context.Context, marshaler runti
 		_   = err
 	)
 
-	val, ok = pathParams["id"]
+	val, ok = pathParams["post_id"]
 	if !ok {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "id")
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "post_id")
 	}
 
-	protoReq.Id, err = runtime.String(val)
+	protoReq.PostId, err = runtime.String(val)
 	if err != nil {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "id", err)
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "post_id", err)
 	}
 
 	msg, err := server.UpdatePostContent(ctx, &protoReq)
@@ -302,14 +302,14 @@ func request_Post_UpdatePostLikes_0(ctx context.Context, marshaler runtime.Marsh
 		_   = err
 	)
 
-	val, ok = pathParams["id"]
+	val, ok = pathParams["post_id"]
 	if !ok {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "id")
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "post_id")
 	}
 
-	protoReq.Id, err = runtime.String(val)
+	protoReq.PostId, err = runtime.String(val)
 	if err != nil {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "id", err)
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "post_id", err)
 	}
 
 	msg, err := client.UpdatePostLikes(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
@@ -328,14 +328,14 @@ func local_request_Post_UpdatePostLikes_0(ctx context.Context, marshaler runtime
 		_   = err
 	)
 
-	val, ok = pathParams["id"]
+	val, ok = pathParams["post_id"]
 	if !ok {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "id")
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "post_id")
 	}
 
-	protoReq.Id, err = runtime.String(val)
+	protoReq.PostId, err = runtime.String(val)
 	if err != nil {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "id", err)
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "post_id", err)
 	}
 
 	msg, err := server.UpdatePostLikes(ctx, &protoReq)
@@ -354,14 +354,14 @@ func request_Post_UpdatePostViews_0(ctx context.Context, marshaler runtime.Marsh
 		_   = err
 	)
 
-	val, ok = pathParams["id"]
+	val, ok = pathParams["post_id"]
 	if !ok {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "id")
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "post_id")
 	}
 
-	protoReq.Id, err = runtime.String(val)
+	protoReq.PostId, err = runtime.String(val)
 	if err != nil {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "id", err)
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "post_id", err)
 	}
 
 	msg, err := client.UpdatePostViews(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
@@ -380,14 +380,14 @@ func local_request_Post_UpdatePostViews_0(ctx context.Context, marshaler runtime
 		_   = err
 	)
 
-	val, ok = pathParams["id"]
+	val, ok = pathParams["post_id"]
 	if !ok {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "id")
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "post_id")
 	}
 
-	protoReq.Id, err = runtime.String(val)
+	protoReq.PostId, err = runtime.String(val)
 	if err != nil {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "id", err)
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "post_id", err)
 	}
 
 	msg, err := server.UpdatePostViews(ctx, &protoReq)
@@ -406,14 +406,14 @@ func request_Post_DeletePost_0(ctx context.Context, marshaler runtime.Marshaler,
 		_   = err
 	)
 
-	val, ok = pathParams["id"]
+	val, ok = pathParams["post_id"]
 	if !ok {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "id")
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "post_id")
 	}
 
-	protoReq.Id, err = runtime.String(val)
+	protoReq.PostId, err = runtime.String(val)
 	if err != nil {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "id", err)
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "post_id", err)
 	}
 
 	msg, err := client.DeletePost(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
@@ -432,14 +432,14 @@ func local_request_Post_DeletePost_0(ctx context.Context, marshaler runtime.Mars
 		_   = err
 	)
 
-	val, ok = pathParams["id"]
+	val, ok = pathParams["post_id"]
 	if !ok {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "id")
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "post_id")
 	}
 
-	protoReq.Id, err = runtime.String(val)
+	protoReq.PostId, err = runtime.String(val)
 	if err != nil {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "id", err)
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "post_id", err)
 	}
 
 	msg, err := server.DeletePost(ctx, &protoReq)
@@ -460,7 +460,7 @@ func RegisterPostHandlerServer(ctx context.Context, mux *runtime.ServeMux, serve
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
-		ctx, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/pb.Post/GetPost", runtime.WithHTTPPathPattern("/posts/{id}"))
+		ctx, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/pb.Post/GetPost", runtime.WithHTTPPathPattern("/posts/{post_id}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -556,7 +556,7 @@ func RegisterPostHandlerServer(ctx context.Context, mux *runtime.ServeMux, serve
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
-		ctx, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/pb.Post/UpdatePostContent", runtime.WithHTTPPathPattern("/posts/content/{id}"))
+		ctx, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/pb.Post/UpdatePostContent", runtime.WithHTTPPathPattern("/posts/content/{post_id}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -580,7 +580,7 @@ func RegisterPostHandlerServer(ctx context.Context, mux *runtime.ServeMux, serve
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
-		ctx, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/pb.Post/UpdatePostLikes", runtime.WithHTTPPathPattern("/posts/likes/{id}"))
+		ctx, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/pb.Post/UpdatePostLikes", runtime.WithHTTPPathPattern("/posts/likes/{post_id}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -604,7 +604,7 @@ func RegisterPostHandlerServer(ctx context.Context, mux *runtime.ServeMux, serve
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
-		ctx, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/pb.Post/UpdatePostViews", runtime.WithHTTPPathPattern("/posts/views/{id}"))
+		ctx, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/pb.Post/UpdatePostViews", runtime.WithHTTPPathPattern("/posts/views/{post_id}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -628,7 +628,7 @@ func RegisterPostHandlerServer(ctx context.Context, mux *runtime.ServeMux, serve
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
-		ctx, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/pb.Post/DeletePost", runtime.WithHTTPPathPattern("/posts/{id}"))
+		ctx, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/pb.Post/DeletePost", runtime.WithHTTPPathPattern("/posts/{post_id}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -691,7 +691,7 @@ func RegisterPostHandlerClient(ctx context.Context, mux *runtime.ServeMux, clien
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
-		ctx, err = runtime.AnnotateContext(ctx, mux, req, "/pb.Post/GetPost", runtime.WithHTTPPathPattern("/posts/{id}"))
+		ctx, err = runtime.AnnotateContext(ctx, mux, req, "/pb.Post/GetPost", runtime.WithHTTPPathPattern("/posts/{post_id}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -775,7 +775,7 @@ func RegisterPostHandlerClient(ctx context.Context, mux *runtime.ServeMux, clien
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
-		ctx, err = runtime.AnnotateContext(ctx, mux, req, "/pb.Post/UpdatePostContent", runtime.WithHTTPPathPattern("/posts/content/{id}"))
+		ctx, err = runtime.AnnotateContext(ctx, mux, req, "/pb.Post/UpdatePostContent", runtime.WithHTTPPathPattern("/posts/content/{post_id}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -796,7 +796,7 @@ func RegisterPostHandlerClient(ctx context.Context, mux *runtime.ServeMux, clien
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
-		ctx, err = runtime.AnnotateContext(ctx, mux, req, "/pb.Post/UpdatePostLikes", runtime.WithHTTPPathPattern("/posts/likes/{id}"))
+		ctx, err = runtime.AnnotateContext(ctx, mux, req, "/pb.Post/UpdatePostLikes", runtime.WithHTTPPathPattern("/posts/likes/{post_id}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -817,7 +817,7 @@ func RegisterPostHandlerClient(ctx context.Context, mux *runtime.ServeMux, clien
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
-		ctx, err = runtime.AnnotateContext(ctx, mux, req, "/pb.Post/UpdatePostViews", runtime.WithHTTPPathPattern("/posts/views/{id}"))
+		ctx, err = runtime.AnnotateContext(ctx, mux, req, "/pb.Post/UpdatePostViews", runtime.WithHTTPPathPattern("/posts/views/{post_id}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -838,7 +838,7 @@ func RegisterPostHandlerClient(ctx context.Context, mux *runtime.ServeMux, clien
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
-		ctx, err = runtime.AnnotateContext(ctx, mux, req, "/pb.Post/DeletePost", runtime.WithHTTPPathPattern("/posts/{id}"))
+		ctx, err = runtime.AnnotateContext(ctx, mux, req, "/pb.Post/DeletePost", runtime.WithHTTPPathPattern("/posts/{post_id}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -867,7 +867,7 @@ func (m response_Post_GetPost_0) XXX_ResponseBody() interface{} {
 }
 
 var (
-	pattern_Post_GetPost_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 1, 0, 4, 1, 5, 1}, []string{"posts", "id"}, ""))
+	pattern_Post_GetPost_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 1, 0, 4, 1, 5, 1}, []string{"posts", "post_id"}, ""))
 
 	pattern_Post_ListPost_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0}, []string{"posts"}, ""))
 
@@ -875,13 +875,13 @@ var (
 
 	pattern_Post_CreatePost_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0}, []string{"posts"}, ""))
 
-	pattern_Post_UpdatePostContent_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 1, 0, 4, 1, 5, 2}, []string{"posts", "content", "id"}, ""))
+	pattern_Post_UpdatePostContent_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 1, 0, 4, 1, 5, 2}, []string{"posts", "content", "post_id"}, ""))
 
-	pattern_Post_UpdatePostLikes_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 1, 0, 4, 1, 5, 2}, []string{"posts", "likes", "id"}, ""))
+	pattern_Post_UpdatePostLikes_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 1, 0, 4, 1, 5, 2}, []string{"posts", "likes", "post_id"}, ""))
 
-	pattern_Post_UpdatePostViews_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 1, 0, 4, 1, 5, 2}, []string{"posts", "views", "id"}, ""))
+	pattern_Post_UpdatePostViews_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 1, 0, 4, 1, 5, 2}, []string{"posts", "views", "post_id"}, ""))
 
-	pattern_Post_DeletePost_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 1, 0, 4, 1, 5, 1}, []string{"posts", "id"}, ""))
+	pattern_Post_DeletePost_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 1, 0, 4, 1, 5, 1}, []string{"posts", "post_id"}, ""))
 )
 
 var (

@@ -92,7 +92,10 @@ func (dao *mongoPostDAO) Create(ctx context.Context, post *Post) (primitive.Obje
 func (dao *mongoPostDAO) UpdateContent(ctx context.Context, post *Post) error {
 	if result, err := dao.collection.UpdateOne(
 		ctx,
-		bson.M{"_id": post.ID},
+		bson.M{
+			"_id":     post.ID,
+			"user_id": post.UserID,
+		},
 		bson.M{
 			"$set": bson.M{
 				"title":   post.Title,
@@ -145,8 +148,11 @@ func (dao *mongoPostDAO) UpdateViews(ctx context.Context, id primitive.ObjectID)
 	return nil
 }
 
-func (dao *mongoPostDAO) Delete(ctx context.Context, id primitive.ObjectID) error {
-	if result, err := dao.collection.DeleteOne(ctx, bson.M{"_id": id}); err != nil {
+func (dao *mongoPostDAO) Delete(ctx context.Context, id primitive.ObjectID, user_id primitive.ObjectID) error {
+	if result, err := dao.collection.DeleteOne(ctx, bson.M{
+		"_id":     id,
+		"user_id": user_id,
+	}); err != nil {
 		return err
 	} else if result.DeletedCount == 0 {
 		return ErrPostNotFound

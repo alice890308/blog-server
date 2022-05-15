@@ -10,7 +10,7 @@ option go_package = "/pb";
 service Post {
     rpc GetPost(GetPostRequest) returns (GetPostResponse) {
         option (google.api.http) = {
-            get: "/posts/{id}"
+            get: "/posts/{post_id}"
             response_body: "post"
         };
     }
@@ -37,7 +37,7 @@ service Post {
 
     rpc UpdatePostContent(UpdatePostContentRequest) returns (UpdatePostContentResponse) {
         option (google.api.http) = {
-            put: "/posts/content/{id}"
+            put: "/posts/content/{post_id}"
             body: "*"
             response_body: "*"
         };
@@ -45,21 +45,21 @@ service Post {
 
     rpc UpdatePostLikes(UpdatePostLikesRequest) returns (UpdatePostLikesResponse) {
         option (google.api.http) = {
-            put: "/posts/likes/{id}"
+            put: "/posts/likes/{post_id}"
             response_body: "*"
         };
     }
 
     rpc UpdatePostViews(UpdatePostViewsRequest) returns (UpdatePostViewsResponse) {
         option (google.api.http) = {
-            put: "/posts/views/{id}"
+            put: "/posts/views/{post_id}"
             response_body: "*"
         };
     }
 
     rpc DeletePost(DeletePostRequest) returns (DeletePostResponse) {
         option (google.api.http) = {
-            delete: "/posts/{id}"
+            delete: "/posts/{post_id}"
             response_body: "*"
         };
     }
