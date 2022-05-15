@@ -8,9 +8,11 @@ import (
 	"github.com/alice890308/blog-server/modules/api/pb"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"golang.org/x/crypto/bcrypt"
+	"google.golang.org/grpc/metadata"
 )
 
 func (s *Service) CreateUser(ctx context.Context, req *pb.CreateUserRequest) (*pb.CreateUserResponse, error) {
+
 	hashedPWD, err := bcrypt.GenerateFromPassword([]byte(req.GetPassword()), bcrypt.DefaultCost)
 	if err != nil {
 		return nil, ErrToHashPWD
@@ -62,13 +64,17 @@ func (s *Service) ListUser(ctx context.Context, req *pb.ListUserRequest) (*pb.Li
 }
 
 func (s *Service) UpdateUser(ctx context.Context, req *pb.UpdateUserRequest) (*pb.UpdateUserResponse, error) {
-	id, err := primitive.ObjectIDFromHex(req.GetId())
+	md, ok := metadata.FromIncomingContext(ctx)
+	if !ok {
+		return nil, ErrMetadataNotProvided
+	}
+	userID, err := primitive.ObjectIDFromHex(md["user_id"][0])
 	if err != nil {
 		return nil, ErrInvalidObjectID
 	}
 
 	user := &dao.User{
-		ID:          id,
+		ID:          userID,
 		Name:        req.GetUserName(),
 		Description: req.GetDescription(),
 		Avator:      req.GetAvator(),
