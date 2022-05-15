@@ -10,6 +10,11 @@ import (
 	"go.uber.org/zap"
 )
 
+type JWT interface {
+	Generate(userID string) (string, error)
+	Verify(accessToken string) (*Payload, error)
+}
+
 type JWTConfig struct {
 	secretKey     string        `long:"secretKey" env:"SECRETKEY" description:"jwt secret key" required:"true"`
 	tokenDuration time.Duration `long:"timeDuration" env:"TIMEDURATION" description:"jwt token duration" default:"60d"`

@@ -12,10 +12,10 @@ type Service struct {
 
 	userDAO    dao.UserDAO
 	postDAO    dao.PostDAO
-	jwtManager authkit.JWTManager
+	jwtManager authkit.JWT
 }
 
-func NewService(postDAO dao.PostDAO, userDAO dao.UserDAO, jwtManager authkit.JWTManager) *Service {
+func NewService(postDAO dao.PostDAO, userDAO dao.UserDAO, jwtManager authkit.JWT) *Service {
 	return &Service{
 		userDAO:    userDAO,
 		postDAO:    postDAO,

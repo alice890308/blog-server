@@ -80,7 +80,7 @@ func RegisterSessionHandlerServer(ctx context.Context, mux *runtime.ServeMux, se
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
-		ctx, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/pb.Session/Login", runtime.WithHTTPPathPattern("/session/login"))
+		ctx, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/pb.Session/Login", runtime.WithHTTPPathPattern("/session"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -143,7 +143,7 @@ func RegisterSessionHandlerClient(ctx context.Context, mux *runtime.ServeMux, cl
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
-		ctx, err = runtime.AnnotateContext(ctx, mux, req, "/pb.Session/Login", runtime.WithHTTPPathPattern("/session/login"))
+		ctx, err = runtime.AnnotateContext(ctx, mux, req, "/pb.Session/Login", runtime.WithHTTPPathPattern("/session"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -163,7 +163,7 @@ func RegisterSessionHandlerClient(ctx context.Context, mux *runtime.ServeMux, cl
 }
 
 var (
-	pattern_Session_Login_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"session", "login"}, ""))
+	pattern_Session_Login_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0}, []string{"session"}, ""))
 )
 
 var (

@@ -12,7 +12,6 @@ import (
 
 func (s *Service) Login(ctx context.Context, req *pb.LoginRequest) (*pb.LoginResponse, error) {
 	user, err := s.userDAO.GetByUserAccount(ctx, req.GetAccount())
-	userID := user.ID.Hex()
 	if err != nil {
 		if errors.Is(err, dao.ErrUserNotFound) {
 			return nil, ErrUserNotFound
@@ -25,10 +24,11 @@ func (s *Service) Login(ctx context.Context, req *pb.LoginRequest) (*pb.LoginRes
 		return nil, ErrWrongPWD
 	}
 
+	userID := user.ID.Hex()
 	token, err := s.jwtManager.Generate(userID)
 	if err != nil {
 		return nil, err
 	}
 
-	return &pb.LoginResponse{Token: token, Id: userID}, nil
+	return &pb.LoginResponse{Token: token, UserId: userID}, nil
 }

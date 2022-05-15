@@ -11,5 +11,5 @@ message LoginRequest {
 
 message LoginResponse {
     string token = 1;
-    string id = 2;
+    string user_id = 2;
 }
