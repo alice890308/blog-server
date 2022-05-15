@@ -12,6 +12,7 @@ import (
 
 func (s *Service) Login(ctx context.Context, req *pb.LoginRequest) (*pb.LoginResponse, error) {
 	user, err := s.userDAO.GetByUserAccount(ctx, req.GetAccount())
+	userID := user.ID.Hex()
 	if err != nil {
 		if errors.Is(err, dao.ErrUserNotFound) {
 			return nil, ErrUserNotFound
