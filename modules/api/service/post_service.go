@@ -10,7 +10,7 @@ import (
 )
 
 func (s *Service) GetPost(ctx context.Context, req *pb.GetPostRequest) (*pb.GetPostResponse, error) {
-	postID, err := primitive.ObjectIDFromHex(req.GetId())
+	postID, err := primitive.ObjectIDFromHex(req.GetPostId())
 	if err != nil {
 		return nil, ErrInvalidObjectID
 	}
@@ -53,7 +53,7 @@ func (s *Service) ListPostByUserID(ctx context.Context, req *pb.ListPostByUserID
 		return nil, ErrInvalidObjectID
 	}
 
-	posts, err := s.postDAO.ListByUserID(ctx, userID, req.Limit, req.Skip)
+	posts, err := s.postDAO.ListByUserID(ctx, userID, req.GetLimit(), req.GetSkip())
 	if err != nil {
 		return nil, err
 	}
@@ -78,13 +78,8 @@ func (s *Service) ListPostByUserID(ctx context.Context, req *pb.ListPostByUserID
 }
 
 func (s *Service) CreatePost(ctx context.Context, req *pb.CreatePostRequest) (*pb.CreatePostResponse, error) {
-	userID, err := primitive.ObjectIDFromHex(req.UserId)
+	userID, err := getUserIdFromMetadata(ctx)
 	if err != nil {
-		return nil, ErrInvalidObjectID
-	}
-
-	// check user exists
-	if _, err := s.userDAO.Get(ctx, userID); err != nil {
 		return nil, err
 	}
 
@@ -97,28 +92,28 @@ func (s *Service) CreatePost(ctx context.Context, req *pb.CreatePostRequest) (*p
 		Tags:    req.Tags,
 	}
 
-	result, err := s.postDAO.Create(ctx, post)
+	postID, err := s.postDAO.Create(ctx, post)
 	if err != nil {
 		return nil, err
 	}
 
-	return &pb.CreatePostResponse{Id: result.Hex()}, nil
+	return &pb.CreatePostResponse{PostId: postID.Hex()}, nil
 }
 
 func (s *Service) UpdatePostContent(ctx context.Context, req *pb.UpdatePostContentRequest) (*pb.UpdatePostContentResponse, error) {
-	ID, err := primitive.ObjectIDFromHex(req.Id)
+	userID, err := getUserIdFromMetadata(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	postID, err := primitive.ObjectIDFromHex(req.GetPostId())
 	if err != nil {
 		return nil, ErrInvalidObjectID
 	}
 
-	// check if post exists
-	_, err = s.postDAO.Get(ctx, ID)
-	if err != nil {
-		return nil, err
-	}
-
 	post := &dao.Post{
-		ID:      ID,
+		ID:      postID,
+		UserID:  userID,
 		Title:   req.Title,
 		Content: req.Content,
 		Tags:    req.Tags,
@@ -128,7 +123,6 @@ func (s *Service) UpdatePostContent(ctx context.Context, req *pb.UpdatePostConte
 		if errors.Is(err, dao.ErrPostNotFound) {
 			return nil, ErrPostNotFound
 		}
-
 		return nil, err
 	}
 
@@ -136,12 +130,12 @@ func (s *Service) UpdatePostContent(ctx context.Context, req *pb.UpdatePostConte
 }
 
 func (s *Service) UpdatePostLikes(ctx context.Context, req *pb.UpdatePostLikesRequest) (*pb.UpdatePostLikesResponse, error) {
-	userID, err := primitive.ObjectIDFromHex(req.Id)
+	postID, err := primitive.ObjectIDFromHex(req.GetPostId())
 	if err != nil {
 		return nil, ErrInvalidObjectID
 	}
 
-	if err := s.postDAO.UpdateLikes(ctx, userID); err != nil {
+	if err := s.postDAO.UpdateLikes(ctx, postID); err != nil {
 		if errors.Is(err, dao.ErrPostNotFound) {
 			return nil, ErrPostNotFound
 		}
@@ -153,12 +147,12 @@ func (s *Service) UpdatePostLikes(ctx context.Context, req *pb.UpdatePostLikesRe
 }
 
 func (s *Service) UpdatePostViews(ctx context.Context, req *pb.UpdatePostViewsRequest) (*pb.UpdatePostViewsResponse, error) {
-	userID, err := primitive.ObjectIDFromHex(req.Id)
+	postID, err := primitive.ObjectIDFromHex(req.GetPostId())
 	if err != nil {
 		return nil, ErrInvalidObjectID
 	}
 
-	if err := s.postDAO.UpdateViews(ctx, userID); err != nil {
+	if err := s.postDAO.UpdateViews(ctx, postID); err != nil {
 		if errors.Is(err, dao.ErrPostNotFound) {
 			return nil, ErrPostNotFound
 		}
@@ -170,12 +164,17 @@ func (s *Service) UpdatePostViews(ctx context.Context, req *pb.UpdatePostViewsRe
 }
 
 func (s *Service) DeletePost(ctx context.Context, req *pb.DeletePostRequest) (*pb.DeletePostResponse, error) {
-	userID, err := primitive.ObjectIDFromHex(req.Id)
+	userID, err := getUserIdFromMetadata(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	postID, err := primitive.ObjectIDFromHex(req.GetPostId())
 	if err != nil {
 		return nil, ErrInvalidObjectID
 	}
 
-	if err := s.postDAO.Delete(ctx, userID); err != nil {
+	if err := s.postDAO.Delete(ctx, postID, userID); err != nil {
 		if errors.Is(err, dao.ErrPostNotFound) {
 			return nil, ErrPostNotFound
 		}
