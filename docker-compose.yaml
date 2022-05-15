@@ -6,6 +6,7 @@ x-common-env: &common-env
   MONGO_URL: mongodb://mongo:27017/
   MONGO_DATABASE: blog_server
   REDIS_ADDR: redis:6379
+  JWT_SECRETKEY: D*G-KaPdSgVkYp3s6v9y$B&E)H+MbQeT
 
 x-common-build: &common-build
   image: justin0u0/golang-protoc:protoc-3.19.3-golang-1.17

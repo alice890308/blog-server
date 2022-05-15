@@ -19,6 +19,7 @@ type User struct {
 
 type UserDAO interface {
 	Get(ctx context.Context, id primitive.ObjectID) (*User, error)
+	GetByUserAccount(ctx context.Context, account string) (*User, error)
 	List(ctx context.Context, limit, skip int64) ([]*User, error)
 	Create(ctx context.Context, user *User) error
 	Update(ctx context.Context, user *User) error

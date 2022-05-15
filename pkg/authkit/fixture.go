@@ -1,4 +1,4 @@
-package auth
+package authkit
 
 import (
 	"google.golang.org/grpc/codes"

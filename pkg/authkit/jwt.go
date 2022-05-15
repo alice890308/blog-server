@@ -1,4 +1,4 @@
-package auth
+package authkit
 
 import (
 	"context"
@@ -9,6 +9,11 @@ import (
 	"github.com/golang-jwt/jwt"
 	"go.uber.org/zap"
 )
+
+type JWT interface {
+	Generate(userID string) (string, error)
+	Verify(accessToken string) (*Payload, error)
+}
 
 type JWTConfig struct {
 	secretKey     string        `long:"secretKey" env:"SECRETKEY" description:"jwt secret key" required:"true"`

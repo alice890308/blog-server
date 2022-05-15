@@ -35,6 +35,19 @@ func (dao *mongoUserDAO) Get(ctx context.Context, id primitive.ObjectID) (*User,
 	return &user, nil
 }
 
+func (dao *mongoUserDAO) GetByUserAccount(ctx context.Context, account string) (*User, error) {
+	var user User
+	if err := dao.collection.FindOne(ctx, bson.M{"account": account}).Decode(&user); err != nil {
+		if errors.Is(err, mongo.ErrNoDocuments) {
+			return nil, ErrUserNotFound
+		}
+
+		return nil, err
+	}
+
+	return &user, nil
+}
+
 func (dao *mongoUserDAO) List(ctx context.Context, limit, skip int64) ([]*User, error) {
 	o := options.Find().SetLimit(limit).SetSkip(skip)
 
