@@ -78,7 +78,7 @@ func (s *Service) ListPostByUserID(ctx context.Context, req *pb.ListPostByUserID
 }
 
 func (s *Service) CreatePost(ctx context.Context, req *pb.CreatePostRequest) (*pb.CreatePostResponse, error) {
-	userID, err := getUserId(ctx)
+	userID, err := getUserIdFromMetadata(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -101,7 +101,7 @@ func (s *Service) CreatePost(ctx context.Context, req *pb.CreatePostRequest) (*p
 }
 
 func (s *Service) UpdatePostContent(ctx context.Context, req *pb.UpdatePostContentRequest) (*pb.UpdatePostContentResponse, error) {
-	userID, err := getUserId(ctx)
+	userID, err := getUserIdFromMetadata(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -164,7 +164,7 @@ func (s *Service) UpdatePostViews(ctx context.Context, req *pb.UpdatePostViewsRe
 }
 
 func (s *Service) DeletePost(ctx context.Context, req *pb.DeletePostRequest) (*pb.DeletePostResponse, error) {
-	userID, err := getUserId(ctx)
+	userID, err := getUserIdFromMetadata(ctx)
 	if err != nil {
 		return nil, err
 	}

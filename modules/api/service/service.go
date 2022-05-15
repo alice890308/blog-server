@@ -27,7 +27,7 @@ func NewService(postDAO dao.PostDAO, userDAO dao.UserDAO, jwtManager authkit.JWT
 	}
 }
 
-func getUserId(ctx context.Context) (primitive.ObjectID, error) {
+func getUserIdFromMetadata(ctx context.Context) (primitive.ObjectID, error) {
 	md, ok := metadata.FromIncomingContext(ctx)
 	if !ok {
 		return primitive.NilObjectID, ErrMetadataNotProivided
@@ -35,7 +35,7 @@ func getUserId(ctx context.Context) (primitive.ObjectID, error) {
 
 	userID, err := primitive.ObjectIDFromHex(md["user_id"][0])
 	if err != nil {
-		return primitive.NilObjectID, err
+		return primitive.NilObjectID, ErrInvalidObjectID
 	}
 
 	return userID, nil

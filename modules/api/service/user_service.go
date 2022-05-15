@@ -8,7 +8,6 @@ import (
 	"github.com/alice890308/blog-server/modules/api/pb"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"golang.org/x/crypto/bcrypt"
-	"google.golang.org/grpc/metadata"
 )
 
 func (s *Service) CreateUser(ctx context.Context, req *pb.CreateUserRequest) (*pb.CreateUserResponse, error) {
@@ -37,7 +36,7 @@ func (s *Service) CreateUser(ctx context.Context, req *pb.CreateUserRequest) (*p
 }
 
 func (s *Service) GetUser(ctx context.Context, req *pb.GetUserRequest) (*pb.GetUserResponse, error) {
-	id, err := primitive.ObjectIDFromHex(req.GetId())
+	id, err := primitive.ObjectIDFromHex(req.GetUserId())
 	if err != nil {
 		return nil, ErrInvalidObjectID
 	}
@@ -69,13 +68,9 @@ func (s *Service) ListUser(ctx context.Context, req *pb.ListUserRequest) (*pb.Li
 }
 
 func (s *Service) UpdateUser(ctx context.Context, req *pb.UpdateUserRequest) (*pb.UpdateUserResponse, error) {
-	md, ok := metadata.FromIncomingContext(ctx)
-	if !ok {
-		return nil, ErrMetadataNotProvided
-	}
-	userID, err := primitive.ObjectIDFromHex(md["user_id"][0])
+	userID, err := getUserIdFromMetadata(ctx)
 	if err != nil {
-		return nil, ErrInvalidObjectID
+		return nil, err
 	}
 
 	user := &dao.User{
@@ -98,12 +93,12 @@ func (s *Service) UpdateUser(ctx context.Context, req *pb.UpdateUserRequest) (*p
 }
 
 func (s *Service) DeleteUser(ctx context.Context, req *pb.DeleteUserRequest) (*pb.DeleteUserResponse, error) {
-	id, err := primitive.ObjectIDFromHex(req.GetId())
+	userID, err := getUserIdFromMetadata(ctx)
 	if err != nil {
-		return nil, ErrInvalidObjectID
+		return nil, err
 	}
 
-	if err := s.userDAO.Delete(ctx, id); err != nil {
+	if err := s.userDAO.Delete(ctx, userID); err != nil {
 		if errors.Is(err, dao.ErrUserNotFound) {
 			return nil, ErrUserNotFound
 		}

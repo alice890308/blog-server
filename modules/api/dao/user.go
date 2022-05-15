@@ -28,7 +28,7 @@ type UserDAO interface {
 
 func (u *User) ToProto() *pb.UserInfo {
 	return &pb.UserInfo{
-		Id:          u.ID.Hex(),
+		UserId:      u.ID.Hex(),
 		UserName:    u.Name,
 		UserAccount: u.Account,
 		Description: u.Description,
