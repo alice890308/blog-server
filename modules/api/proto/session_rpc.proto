@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package pb;
+
+import "google/api/annotations.proto";
+import "modules/api/proto/session_message.proto";
+
+option go_package = "/pb";
+
+service Session {
+    rpc Login(LoginRequest) returns (LoginResponse) {
+        option (google.api.http) = {
+            post: "/session/login"
+            response_body: "*"
+        };
+    }
+}
