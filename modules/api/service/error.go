@@ -6,8 +6,9 @@ import (
 )
 
 var (
-	ErrInvalidObjectID = status.Errorf(codes.InvalidArgument, "invalid ObjectID")
-	ErrPostNotFound    = status.Errorf(codes.NotFound, "post not found")
-	ErrUserNotFound    = status.Errorf(codes.NotFound, "user not found")
-	ErrToHashPWD       = status.Errorf(codes.InvalidArgument, "hash password failed")
+	ErrInvalidObjectID      = status.Errorf(codes.InvalidArgument, "invalid ObjectID")
+	ErrPostNotFound         = status.Errorf(codes.NotFound, "post not found")
+	ErrUserNotFound         = status.Errorf(codes.NotFound, "user not found")
+	ErrToHashPWD            = status.Errorf(codes.InvalidArgument, "hash password failed")
+	ErrMetadataNotProivided = status.Errorf(codes.InvalidArgument, "meatadata not provided")
 )
