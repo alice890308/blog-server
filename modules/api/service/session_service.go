@@ -3,7 +3,6 @@ package service
 import (
 	"context"
 	"errors"
-	"fmt"
 
 	"github.com/alice890308/blog-server/modules/api/dao"
 	"github.com/alice890308/blog-server/modules/api/pb"
@@ -11,7 +10,6 @@ import (
 )
 
 func (s *Service) Login(ctx context.Context, req *pb.LoginRequest) (*pb.LoginResponse, error) {
-	fmt.Println("login ")
 	user, err := s.userDAO.GetByUserAccount(ctx, req.GetUserAccount())
 	if err != nil {
 		if errors.Is(err, dao.ErrUserNotFound) {
