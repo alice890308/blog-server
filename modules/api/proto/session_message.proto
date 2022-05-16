@@ -5,8 +5,8 @@ package pb;
 option go_package = "/pb";
 
 message LoginRequest {
-    string account = 1;
-    string password = 2;
+    string user_account = 1;
+    string user_password = 2;
 }
 
 message LoginResponse {

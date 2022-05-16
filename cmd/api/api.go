@@ -72,13 +72,16 @@ func runAPI(_ *cobra.Command, _ []string) error {
 		}
 	}()
 
-	return runkit.GracefulRun(serveGRPC(lis, svc, logger), &args.GracefulConfig)
+	auth := authkit.NewAuthService(jwtManager)
+
+	return runkit.GracefulRun(serveGRPC(lis, svc, logger, grpc.UnaryInterceptor(auth.UnaryServerInterceptor())), &args.GracefulConfig)
 }
 
 func serveGRPC(lis net.Listener, svc *service.Service, logger *logkit.Logger, opt ...grpc.ServerOption) runkit.GracefulRunFunc {
 	grpcServer := grpc.NewServer(opt...)
 	pb.RegisterPostServer(grpcServer, svc)
 	pb.RegisterUserServer(grpcServer, svc)
+	pb.RegisterSessionServer(grpcServer, svc)
 
 	return func(ctx context.Context) error {
 		go func() {

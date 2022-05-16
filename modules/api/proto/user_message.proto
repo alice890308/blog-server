@@ -15,7 +15,7 @@ message UserInfo {
 message CreateUserRequest {
 	string user_name = 1;
     string user_account = 2;
-    string password = 3;
+    string user_password = 3;
 }
 
 message CreateUserResponse {}
