@@ -82,6 +82,9 @@ func serveHTTP(lis net.Listener, conn *grpc.ClientConn, logger *logkit.Logger) r
 		if err := pb.RegisterPostHandler(ctx, mux, conn); err != nil {
 			logger.Fatal("failed to register post handler to HTTP server", zap.Error(err))
 		}
+		if err := pb.RegisterSessionHandler(ctx, mux, conn); err != nil {
+			logger.Fatal("failed to register session handler to HTTP server", zap.Error(err))
+		}
 
 		go func() {
 			if err := httpServer.Serve(lis); err != nil {

@@ -6,7 +6,14 @@ import (
 )
 
 var publicAPI = map[string]bool{
-	"aaa": true,
+	"/pb.Post/ListPost":         true,
+	"/pb.Post/GetPost":          true,
+	"/pb.Post/ListPostByUserID": true,
+	"/pb.Post/UpdatePostViews":  true,
+	"/pb.User/ListUser":         true,
+	"/pb.User/CreateUser":       true,
+	"/pb.User/GetUser":          true,
+	"/pb.Session/Login":         true,
 }
 
 var (

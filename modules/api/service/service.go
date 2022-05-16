@@ -13,6 +13,7 @@ import (
 type Service struct {
 	pb.UnimplementedPostServer
 	pb.UnimplementedUserServer
+	pb.UnimplementedSessionServer
 
 	userDAO    dao.UserDAO
 	postDAO    dao.PostDAO

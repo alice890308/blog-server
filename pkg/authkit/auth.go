@@ -33,34 +33,36 @@ func (a *AuthService) UnaryServerInterceptor() grpc.UnaryServerInterceptor {
 		}
 
 		// check token if is valid and get user_id
-		err := a.authenticate(ctx)
+		newCtx, err := a.authenticate(ctx)
 		if err != nil {
 			return nil, err
 		}
 
-		return handler(ctx, req)
+		return handler(newCtx, req)
 	}
 }
 
-func (a *AuthService) authenticate(ctx context.Context) error {
+func (a *AuthService) authenticate(ctx context.Context) (context.Context, error) {
 	md, ok := metadata.FromIncomingContext(ctx)
 	if !ok {
-		return MetaDataNotProvided
+		return ctx, MetaDataNotProvided
 	}
 
 	values := md["authorization"]
 	if len(values) == 0 {
-		return TokenNotProvided
+		return ctx, TokenNotProvided
 	}
 
-	accessToken := values[0]
+	// get access token
+	accessToken := string(values[0][7:])
+	// verify token and get userID
 	payload, err := a.JWTManager.Verify(accessToken)
 	if err != nil {
-		return TokenInvalid
+		return ctx, TokenInvalid
 	}
 
-	// append user id to context
-	md.Append("user_id", payload.Id)
+	md.Append("user_id", payload.UserID)
+	newCtx := metadata.NewIncomingContext(ctx, md)
 
-	return nil
+	return newCtx, nil
 }

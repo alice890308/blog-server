@@ -11,6 +11,7 @@ service Session {
     rpc Login(LoginRequest) returns (LoginResponse) {
         option (google.api.http) = {
             post: "/session"
+            body: "*"
             response_body: "*"
         };
     }
