@@ -10,7 +10,7 @@ option go_package = "/pb";
 service Session {
     rpc Login(LoginRequest) returns (LoginResponse) {
         option (google.api.http) = {
-            post: "/sessions"
+            post: "/session"
             body: "*"
             response_body: "*"
         };

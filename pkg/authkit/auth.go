@@ -54,6 +54,7 @@ func (a *AuthService) authenticate(ctx context.Context) error {
 	}
 
 	accessToken := values[0]
+	fmt.Println(accessToken)
 	payload, err := a.JWTManager.Verify(accessToken)
 	if err != nil {
 		return TokenInvalid

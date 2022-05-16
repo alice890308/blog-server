@@ -60,7 +60,7 @@ func runAPI(_ *cobra.Command, _ []string) error {
 	userDAO := dao.NewMongoUserDAO(mongoClient.Database().Collection("users"))
 	jwtManager := authkit.NewJWTManager(ctx, &args.JWTConfig)
 	svc := service.NewService(postDAO, userDAO, jwtManager)
-
+	logger.Info("jwtManager")
 	logger.Info("listen to gRPC addr", zap.String("grpc_addr", args.GRPCAddr))
 	lis, err := net.Listen("tcp", args.GRPCAddr)
 	if err != nil {

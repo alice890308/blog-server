@@ -19,7 +19,7 @@ func (s *Service) CreateUser(ctx context.Context, req *pb.CreateUserRequest) (*p
 		return nil, err
 	}
 
-	hashedPWD, err := bcrypt.GenerateFromPassword([]byte(req.GetPassword()), bcrypt.DefaultCost)
+	hashedPWD, err := bcrypt.GenerateFromPassword([]byte(req.GetUserPassword()), bcrypt.DefaultCost)
 	if err != nil {
 		return nil, ErrToHashPWD
 	}

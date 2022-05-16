@@ -16,8 +16,8 @@ type JWT interface {
 }
 
 type JWTConfig struct {
-	secretKey     string        `long:"secretKey" env:"SECRETKEY" description:"jwt secret key" required:"true"`
-	tokenDuration time.Duration `long:"timeDuration" env:"TIMEDURATION" description:"jwt token duration" default:"60d"`
+	SecretKey     string        `long:"secretKey" env:"SECRETKEY" description:"jwt secret key" required:"true"`
+	TokenDuration time.Duration `long:"timeDuration" env:"TIMEDURATION" description:"jwt token duration" default:"60h"`
 }
 
 type JWTManager struct {
@@ -32,12 +32,12 @@ type Payload struct {
 
 func NewJWTManager(ctx context.Context, conf *JWTConfig) *JWTManager {
 	_ = logkit.FromContext(ctx).With(
-		zap.String("tokenDuration", conf.tokenDuration.String()),
+		zap.String("tokenDuration", conf.TokenDuration.String()),
 	)
 
 	return &JWTManager{
-		secretKey:     conf.secretKey,
-		tokenDuration: conf.tokenDuration,
+		secretKey:     conf.SecretKey,
+		tokenDuration: conf.TokenDuration,
 	}
 }
 
