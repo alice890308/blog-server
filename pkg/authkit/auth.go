@@ -2,7 +2,7 @@ package authkit
 
 import (
 	"context"
-	"fmt"
+	"log"
 
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/metadata"
@@ -26,7 +26,7 @@ func (a *AuthService) UnaryServerInterceptor() grpc.UnaryServerInterceptor {
 		handler grpc.UnaryHandler,
 	) (interface{}, error) {
 		// check method if needing authentication
-		fmt.Println("request path: " + info.FullMethod)
+		log.Printf("{Request: %s}", info.FullMethod)
 
 		if _, ok := publicAPI[info.FullMethod]; ok {
 			return handler(ctx, req)
