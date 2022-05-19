@@ -1,8 +1,11 @@
 package service
 
 import (
-	"github.com/gin-gonic/gin"
-	"github.com/google/uuid"
+	"encoding/json"
+	"fmt"
+	"io/ioutil"
+	"net/http"
+	"os"
 )
 
 type Service struct{}
@@ -11,31 +14,75 @@ func NewService() *Service {
 	return &Service{}
 }
 
-func (s *Service) UploadFile(c *gin.Context) {
-	file, err := c.FormFile("file")
-	if err != nil {
-		c.JSON(BadRequest, gin.H{
-			"error": "request contains no file",
-		})
-
-		return
-	}
-
-	uuid := uuid.New().String()
-	if err := c.SaveUploadedFile(file, "/static/"+uuid); err != nil {
-		c.JSON(InternalServerError, gin.H{
-			"error": "internal server error",
-		})
-
-		return
-	}
-
-	c.JSON(SuccessRequest, gin.H{
-		"message": "upload file successfully",
-	})
+func (s *Service) Status(w http.ResponseWriter, r *http.Request) {
+	w.Write([]byte("status: ok"))
 }
 
-// func (s *Service) DownloadFile(c *gin.Context) {
-// 	filePath := c.Query("file_path")
+func (s *Service) Upload(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
 
-// }
+	file, header, err := r.FormFile("file")
+	if err != nil {
+		fmt.Println("upload file error")
+
+		return
+	}
+	fmt.Println(header.Size)
+	defer file.Close()
+
+	buffer := make([]byte, 512)
+	_, err = file.Read(buffer)
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	var tempFile *os.File
+	resp := make(map[string]string)
+
+	contentType := http.DetectContentType(buffer)
+	fmt.Println(contentType)
+	switch contentType {
+	case "image/jpg":
+		tempFile, err = ioutil.TempFile("static", "*.jpg")
+		if err != nil {
+			fmt.Println(err)
+		}
+	case "image/png":
+		tempFile, err = ioutil.TempFile("static", "*.png")
+		if err != nil {
+			fmt.Println(err)
+		}
+	case "image/jpeg":
+		tempFile, err = ioutil.TempFile("static", "*.jpeg")
+		if err != nil {
+			fmt.Println(err)
+		}
+	default:
+		resp["message"] = "wrong image type"
+		jsonResp, err := json.Marshal(resp)
+		if err != nil {
+			fmt.Println(err)
+		}
+		w.WriteHeader(http.StatusBadRequest)
+		w.Write(jsonResp)
+		return
+	}
+
+	fileName := tempFile.Name()
+
+	fileBytes, err := ioutil.ReadAll(file)
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	tempFile.Write(fileBytes)
+
+	resp["message"] = "success"
+	resp["file path"] = fileName
+	jsonResp, err := json.Marshal(resp)
+	if err != nil {
+		fmt.Println(err)
+	}
+	w.WriteHeader(http.StatusAccepted)
+	w.Write(jsonResp)
+}
