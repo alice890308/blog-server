@@ -3,6 +3,9 @@ package file
 import (
 	"context"
 	"log"
+	"os"
+	"os/signal"
+	"syscall"
 
 	"github.com/alice890308/blog-server/modules/file/service"
 	"github.com/alice890308/blog-server/pkg/authkit"
@@ -18,11 +21,14 @@ type APIArgs struct {
 }
 
 func NewFileCommand() *cobra.Command {
-	cmd := &cobra.Command{
-		Use:   "file [service]",
+	return &cobra.Command{
+		Use:   "file",
 		Short: "start file's service",
+		RunE:  runFile,
 	}
+}
 
+func runFile(_ *cobra.Command, _ []string) error {
 	ctx := context.Background()
 	var args APIArgs
 	if _, err := flags.NewParser(&args, flags.Default).Parse(); err != nil {
@@ -39,13 +45,13 @@ func NewFileCommand() *cobra.Command {
 	svc := service.NewService(jwtManager)
 
 	router := gin.Default()
-	router.StaticFS("/static", gin.Dir("/static", false))
+	router.StaticFS("/file/static", gin.Dir("/static", false))
 
-	router.GET("/status", func(c *gin.Context) {
+	router.GET("/file/status", func(c *gin.Context) {
 		svc.Status(c)
 	})
 
-	router.POST("/upload", func(c *gin.Context) {
+	router.POST("/file/upload", func(c *gin.Context) {
 		svc.Upload(c)
 	})
 
@@ -54,5 +60,10 @@ func NewFileCommand() *cobra.Command {
 		log.Fatal(err)
 	}
 
-	return cmd
+	shutdownCh := make(chan os.Signal, 1)
+	signal.Notify(shutdownCh, syscall.SIGINT, syscall.SIGTERM)
+
+	<-shutdownCh
+
+	return nil
 }
