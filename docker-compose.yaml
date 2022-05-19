@@ -82,6 +82,8 @@ services:
 
   file:
     image: tsw303005/blog-server:latest
+    environment:
+      <<: *common-env
     command:
     - /cmd
     - file

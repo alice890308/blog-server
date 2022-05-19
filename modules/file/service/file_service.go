@@ -1,88 +1,109 @@
 package service
 
 import (
-	"encoding/json"
-	"fmt"
+	"io"
 	"io/ioutil"
+	"log"
 	"net/http"
 	"os"
+
+	"github.com/alice890308/blog-server/pkg/authkit"
+	"github.com/gin-gonic/gin"
+	"github.com/google/uuid"
 )
 
-type Service struct{}
-
-func NewService() *Service {
-	return &Service{}
+type Service struct {
+	authkit.JWT
 }
 
-func (s *Service) Status(w http.ResponseWriter, r *http.Request) {
-	w.Write([]byte("status: ok"))
+func NewService(jwtManager authkit.JWT) *Service {
+	return &Service{jwtManager}
 }
 
-func (s *Service) Upload(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json")
+func (s *Service) Status(c *gin.Context) {
+	c.JSON(http.StatusBadRequest, gin.H{
+		"status": "ok",
+	})
+}
 
-	file, header, err := r.FormFile("file")
-	if err != nil {
-		fmt.Println("upload file error")
-
+func (s *Service) Upload(c *gin.Context) {
+	userID := s.getUserID(c.Request.Header["Authorization"][0])
+	if userID == "" {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"message": "invalid token",
+		})
 		return
 	}
-	fmt.Println(header.Size)
-	defer file.Close()
+
+	checkDir(userID)
+
+	fileHeader, err := c.FormFile("file")
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"message": "upload file error",
+		})
+		return
+	}
 
 	buffer := make([]byte, 512)
-	_, err = file.Read(buffer)
+	file, err := fileHeader.Open()
 	if err != nil {
-		fmt.Println(err)
-	}
-
-	var tempFile *os.File
-	resp := make(map[string]string)
-
-	contentType := http.DetectContentType(buffer)
-	fmt.Println(contentType)
-	switch contentType {
-	case "image/jpg":
-		tempFile, err = ioutil.TempFile("static", "*.jpg")
-		if err != nil {
-			fmt.Println(err)
-		}
-	case "image/png":
-		tempFile, err = ioutil.TempFile("static", "*.png")
-		if err != nil {
-			fmt.Println(err)
-		}
-	case "image/jpeg":
-		tempFile, err = ioutil.TempFile("static", "*.jpeg")
-		if err != nil {
-			fmt.Println(err)
-		}
-	default:
-		resp["message"] = "wrong image type"
-		jsonResp, err := json.Marshal(resp)
-		if err != nil {
-			fmt.Println(err)
-		}
-		w.WriteHeader(http.StatusBadRequest)
-		w.Write(jsonResp)
+		c.JSON(http.StatusBadRequest, gin.H{
+			"message": "file header open error",
+		})
 		return
 	}
 
-	fileName := tempFile.Name()
-
+	file.Read(buffer)
+	contentType := http.DetectContentType(buffer)
+	file.Seek(0, io.SeekStart)
 	fileBytes, err := ioutil.ReadAll(file)
 	if err != nil {
-		fmt.Println(err)
+		c.JSON(http.StatusBadRequest, gin.H{
+			"message": "file read error",
+		})
+		return
 	}
 
-	tempFile.Write(fileBytes)
+	filePath := "/static/" + userID + "/" + uuid.New().String()
+	switch contentType {
+	case "image/jpg":
+		filePath = filePath + ".jpg"
+	case "image/png":
+		filePath = filePath + ".png"
+	case "image/jpeg":
+		filePath = filePath + ".jpeg"
+	default:
+		c.JSON(http.StatusBadRequest, gin.H{
+			"message": "file type error",
+		})
+		return
+	}
 
-	resp["message"] = "success"
-	resp["file path"] = fileName
-	jsonResp, err := json.Marshal(resp)
+	ioutil.WriteFile(filePath, fileBytes, 0644)
+	c.JSON(http.StatusAccepted, gin.H{
+		"message":  "success",
+		"filepath": filePath,
+	})
+}
+
+func (s *Service) getUserID(accessToken string) string {
+
+	accessToken = string(accessToken[7:])
+	log.Println(accessToken)
+
+	payload, err := s.JWT.Verify(accessToken)
 	if err != nil {
-		fmt.Println(err)
+		return ""
 	}
-	w.WriteHeader(http.StatusAccepted)
-	w.Write(jsonResp)
+
+	return payload.UserID
+}
+
+func checkDir(userID string) {
+	path := "/static/" + userID
+	_, err := os.Stat(path)
+	if os.IsNotExist(err) {
+		os.Mkdir(path, 0666)
+	}
 }
