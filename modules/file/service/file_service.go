@@ -21,7 +21,7 @@ func NewService(jwtManager authkit.JWT) *Service {
 }
 
 func (s *Service) Status(c *gin.Context) {
-	c.JSON(http.StatusBadRequest, gin.H{
+	c.JSON(http.StatusAccepted, gin.H{
 		"status": "ok",
 	})
 }
