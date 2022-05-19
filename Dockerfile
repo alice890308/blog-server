@@ -1,5 +1,7 @@
-FROM gcr.io/distroless/base-debian11 AS base
+FROM ubuntu:18.10 AS base
 
 COPY bin/app/cmd /cmd
+
+RUN mkdir /static
 
 CMD ["/cmd"]
