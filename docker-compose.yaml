@@ -79,3 +79,14 @@ services:
     - api
     ports:
     - 8008:8080
+
+  file:
+    image: tsw303005/blog-server:latest
+    environment:
+      <<: *common-env
+    command:
+    - /cmd
+    - file
+    ports:
+    - 8080:8080
+    - 8081:8081
