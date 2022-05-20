@@ -1,4 +1,4 @@
-# Default values for api.
+# Default values for gateway.
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
@@ -39,7 +39,7 @@ securityContext: {}
 service:
   type: ClusterIP
   port: 80
-  targetPort: 8081
+  target: 8080
 
 ingress:
   enabled: false
@@ -91,12 +91,10 @@ affinity: {}
 env:
   - name: JWT_SECRETKEY
     value: D*G-KaPdSgVkYp3s6v9y$B&E)H+MbQeT
-  - name: MONGO_URL
-    value: mongodb://mongodb:27017/
-  - name: MONGO_DATABASE
-    value: blog_server
+  - name: GRPC_SERVER_ADDR
+    value: api:80
 
 command:
   - /cmd
   - api
-  - api
+  - gateway
