@@ -7,6 +7,7 @@ import (
 	"os/signal"
 	"syscall"
 
+	"github.com/alice890308/blog-server/modules/file/middleware"
 	"github.com/alice890308/blog-server/modules/file/service"
 	"github.com/alice890308/blog-server/pkg/authkit"
 	"github.com/alice890308/blog-server/pkg/logkit"
@@ -45,6 +46,9 @@ func runFile(_ *cobra.Command, _ []string) error {
 	svc := service.NewService(jwtManager)
 
 	router := gin.Default()
+
+	router.Use(middleware.CORS())
+
 	router.StaticFS("/file/static", gin.Dir("/static", false))
 
 	router.GET("/file/status", func(c *gin.Context) {

@@ -72,7 +72,7 @@ func serveHTTP(lis net.Listener, conn *grpc.ClientConn, logger *logkit.Logger) r
 	mux := runtime.NewServeMux()
 
 	httpServer := &http.Server{
-		Handler: mux,
+		Handler: cors(mux),
 	}
 
 	return func(ctx context.Context) error {
@@ -100,4 +100,13 @@ func serveHTTP(lis net.Listener, conn *grpc.ClientConn, logger *logkit.Logger) r
 
 		return nil
 	}
+}
+
+func cors(h http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Access-Control-Allow-Origin", "*")
+		w.Header().Set("Access-Control-Allow-Methods", "GET, HEAD, PUT, POST, DELETE")
+		w.Header().Set("Access-Control-Allow-Headers", "Content-Type, Access-Control-Allow-Origin, Authorization")
+		h.ServeHTTP(w, r)
+	})
 }
