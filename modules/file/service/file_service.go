@@ -85,7 +85,7 @@ func (s *Service) Upload(c *gin.Context) {
 		return
 	}
 
-	filePath := "/static/" + userID + "/" + uuid.New().String()
+	filePath := "file/static/" + userID + "/" + uuid.New().String()
 	switch contentType {
 	case "image/jpg":
 		filePath = filePath + ".jpg"

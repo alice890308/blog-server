@@ -3,6 +3,7 @@ package service
 import (
 	"context"
 	"errors"
+	"time"
 
 	"github.com/alice890308/blog-server/modules/api/dao"
 	"github.com/alice890308/blog-server/modules/api/pb"
@@ -84,12 +85,14 @@ func (s *Service) CreatePost(ctx context.Context, req *pb.CreatePostRequest) (*p
 	}
 
 	post := &dao.Post{
-		UserID:  userID,
-		Title:   req.Title,
-		Content: req.Content,
-		Views:   0,
-		Likes:   0,
-		Tags:    req.Tags,
+		UserID:    userID,
+		Title:     req.Title,
+		Content:   req.Content,
+		Views:     0,
+		Likes:     0,
+		Tags:      req.Tags,
+		CreatedAT: time.Now(),
+		UpdatedAT: time.Now(),
 	}
 
 	postID, err := s.postDAO.Create(ctx, post)
