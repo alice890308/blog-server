@@ -3,6 +3,7 @@ package dao
 import (
 	"context"
 	"errors"
+	"time"
 
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
@@ -98,9 +99,10 @@ func (dao *mongoPostDAO) UpdateContent(ctx context.Context, post *Post) error {
 		},
 		bson.M{
 			"$set": bson.M{
-				"title":   post.Title,
-				"content": post.Content,
-				"tags":    post.Tags,
+				"title":      post.Title,
+				"content":    post.Content,
+				"tags":       post.Tags,
+				"updated_at": time.Now(),
 			},
 		},
 	); err != nil {

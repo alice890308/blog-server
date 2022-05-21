@@ -21,7 +21,6 @@ type Post struct {
 	Image     string             `bson:"image,omitempty"`
 	CreatedAT time.Time          `bson:"created_at,omitempty"`
 	UpdatedAT time.Time          `bson:"updated_at,omitempty"`
-	DeletedAT time.Time          `bson:"deleted_at,omitempty"`
 }
 
 func (p *Post) ToProto(userName string) *pb.PostInfo {
