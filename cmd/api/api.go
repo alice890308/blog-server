@@ -57,7 +57,7 @@ func runAPI(_ *cobra.Command, _ []string) error {
 	}()
 
 	postDAO := dao.NewMongoPostDAO(mongoClient.Database().Collection("posts"))
-	err := postDAO.CreateIndex()
+	err := postDAO.CreateIndex(ctx)
 	if err != nil {
 		logger.Fatal("failed to create post index!", zap.Error(err))
 	}

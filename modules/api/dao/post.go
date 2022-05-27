@@ -41,14 +41,14 @@ func (p *Post) ToProto(userName string) *pb.PostInfo {
 
 type PostDAO interface {
 	Get(ctx context.Context, id primitive.ObjectID) (*Post, error)
-	List(ctx context.Context, limit, skip int64) ([]*Post, error)
-	ListByUserID(ctx context.Context, user_id primitive.ObjectID, limit, skip int64) ([]*Post, error)
-	TotalCount(ctx context.Context) (int64, error)
+	List(ctx context.Context, limit, skip int64, filter string) ([]*Post, error)
+	ListByUserID(ctx context.Context, userID primitive.ObjectID, limit, skip int64) ([]*Post, error)
 	Create(ctx context.Context, post *Post) (primitive.ObjectID, error)
 	UpdateContent(ctx context.Context, post *Post) error
 	UpdateLikes(ctx context.Context, id primitive.ObjectID) error
 	UpdateViews(ctx context.Context, id primitive.ObjectID) error
-	Delete(ctx context.Context, id primitive.ObjectID, user_id primitive.ObjectID) error
+	Delete(ctx context.Context, id primitive.ObjectID, userID primitive.ObjectID) error
+	CreateIndex(ctx context.Context) error
 }
 
 var (

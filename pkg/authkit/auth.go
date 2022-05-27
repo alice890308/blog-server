@@ -54,7 +54,7 @@ func (a *AuthService) authenticate(ctx context.Context) (context.Context, error)
 	}
 
 	// get access token
-	accessToken := string(values[0][7:])
+	accessToken := values[0][7:]
 	// verify token and get userID
 	payload, err := a.JWTManager.Verify(accessToken)
 	if err != nil {

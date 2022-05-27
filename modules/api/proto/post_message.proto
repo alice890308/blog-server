@@ -35,8 +35,7 @@ message ListPostRequest {
 }
 
 message ListPostResponse {
-    int64 total = 1;
-    repeated PostInfo posts = 2;
+    repeated PostInfo posts = 1;
 }
 
 message ListPostByUserIDRequest {
@@ -46,8 +45,7 @@ message ListPostByUserIDRequest {
 }
 
 message ListPostByUserIDResponse {
-    int64 total = 1;
-    repeated PostInfo posts = 2;
+    repeated PostInfo posts = 1;
 }
 
 message CreatePostRequest {

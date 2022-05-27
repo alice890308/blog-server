@@ -30,12 +30,7 @@ func (s *Service) GetPost(ctx context.Context, req *pb.GetPostRequest) (*pb.GetP
 }
 
 func (s *Service) ListPost(ctx context.Context, req *pb.ListPostRequest) (*pb.ListPostResponse, error) {
-	total, err := s.postDAO.TotalCount(ctx)
-	if err != nil {
-		return nil, err
-	}
-
-	posts, err := s.postDAO.List(ctx, int64(req.GetLimit()), int64(req.GetSkip()))
+	posts, err := s.postDAO.List(ctx, req.GetLimit(), req.GetSkip(), req.GetFilter())
 	if err != nil {
 		return nil, err
 	}
@@ -50,7 +45,7 @@ func (s *Service) ListPost(ctx context.Context, req *pb.ListPostRequest) (*pb.Li
 		pbPosts = append(pbPosts, post.ToProto(user.Name))
 	}
 
-	return &pb.ListPostResponse{Posts: pbPosts, Total: total}, nil
+	return &pb.ListPostResponse{Posts: pbPosts}, nil
 }
 
 func (s *Service) ListPostByUserID(ctx context.Context, req *pb.ListPostByUserIDRequest) (*pb.ListPostByUserIDResponse, error) {
@@ -84,7 +79,7 @@ func (s *Service) ListPostByUserID(ctx context.Context, req *pb.ListPostByUserID
 }
 
 func (s *Service) CreatePost(ctx context.Context, req *pb.CreatePostRequest) (*pb.CreatePostResponse, error) {
-	userID, err := getUserIdFromMetadata(ctx)
+	userID, err := getUserIDFromMetadata(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -110,7 +105,7 @@ func (s *Service) CreatePost(ctx context.Context, req *pb.CreatePostRequest) (*p
 }
 
 func (s *Service) UpdatePostContent(ctx context.Context, req *pb.UpdatePostContentRequest) (*pb.UpdatePostContentResponse, error) {
-	userID, err := getUserIdFromMetadata(ctx)
+	userID, err := getUserIDFromMetadata(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -174,7 +169,7 @@ func (s *Service) UpdatePostViews(ctx context.Context, req *pb.UpdatePostViewsRe
 }
 
 func (s *Service) DeletePost(ctx context.Context, req *pb.DeletePostRequest) (*pb.DeletePostResponse, error) {
-	userID, err := getUserIdFromMetadata(ctx)
+	userID, err := getUserIDFromMetadata(ctx)
 	if err != nil {
 		return nil, err
 	}

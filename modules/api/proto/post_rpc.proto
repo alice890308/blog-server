@@ -18,12 +18,14 @@ service Post {
     rpc ListPost(ListPostRequest) returns (ListPostResponse) {
         option (google.api.http) = {
             get: "/posts"
+            response_body: "*"
         };
     }
 
     rpc ListPostByUserID(ListPostByUserIDRequest) returns (ListPostByUserIDResponse) {
         option (google.api.http) = {
             get: "/posts/byUserID/{user_id}"
+            response_body: "*"
         };
     }
 
