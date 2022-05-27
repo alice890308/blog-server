@@ -37,9 +37,6 @@ func runFile(_ *cobra.Command, _ []string) error {
 	}
 
 	logger := logkit.NewLogger(&args.LoggerConfig)
-	defer func() {
-		_ = logger.Sync()
-	}()
 
 	ctx = logger.WithContext(ctx)
 	jwtManager := authkit.NewJWTManager(ctx, &args.JWTConfig)
@@ -63,6 +60,10 @@ func runFile(_ *cobra.Command, _ []string) error {
 	if err != nil {
 		log.Fatal(err)
 	}
+
+	defer func() {
+		_ = logger.Sync()
+	}()
 
 	shutdownCh := make(chan os.Signal, 1)
 	signal.Notify(shutdownCh, syscall.SIGINT, syscall.SIGTERM)

@@ -70,7 +70,7 @@ func (s *Service) ListUser(ctx context.Context, req *pb.ListUserRequest) (*pb.Li
 }
 
 func (s *Service) UpdateUser(ctx context.Context, req *pb.UpdateUserRequest) (*pb.UpdateUserResponse, error) {
-	userID, err := getUserIdFromMetadata(ctx)
+	userID, err := getUserIDFromMetadata(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -95,7 +95,7 @@ func (s *Service) UpdateUser(ctx context.Context, req *pb.UpdateUserRequest) (*p
 }
 
 func (s *Service) DeleteUser(ctx context.Context, req *pb.DeleteUserRequest) (*pb.DeleteUserResponse, error) {
-	userID, err := getUserIdFromMetadata(ctx)
+	userID, err := getUserIDFromMetadata(ctx)
 	if err != nil {
 		return nil, err
 	}

@@ -23,6 +23,15 @@ func NewMongoPostDAO(collection *mongo.Collection) *mongoPostDAO {
 	}
 }
 
+func (dao *mongoPostDAO) CreateIndex(ctx context.Context) error {
+	model := mongo.IndexModel{Keys: bson.D{{"title", "text"}, {"tags", "text"}}}
+	_, err := dao.collection.Indexes().CreateOne(ctx, model)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 func (dao *mongoPostDAO) Get(ctx context.Context, id primitive.ObjectID) (*Post, error) {
 	var post Post
 
@@ -36,10 +45,16 @@ func (dao *mongoPostDAO) Get(ctx context.Context, id primitive.ObjectID) (*Post,
 	return &post, nil
 }
 
-func (dao *mongoPostDAO) List(ctx context.Context, limit, skip int64) ([]*Post, error) {
-	o := options.Find().SetLimit(limit).SetSkip(skip)
+func (dao *mongoPostDAO) List(ctx context.Context, limit, skip int64, filter string) ([]*Post, error) {
+	var f, sort bson.M
 
-	cursor, err := dao.collection.Find(ctx, bson.M{}, o)
+	if filter != "" {
+		f = bson.D{{"$text", bson.D{{"$search", filter}}}}.Map()
+		sort = bson.D{{"score", bson.D{{"$meta", "textScore"}}}}.Map()
+	}
+	o := options.Find().SetLimit(limit).SetSkip(skip).SetSort(sort)
+
+	cursor, err := dao.collection.Find(ctx, f, o)
 	if err != nil {
 		return nil, err
 	}
@@ -48,23 +63,24 @@ func (dao *mongoPostDAO) List(ctx context.Context, limit, skip int64) ([]*Post, 
 	posts := make([]*Post, 0)
 	for cursor.Next(ctx) {
 		var post Post
+
 		if err := cursor.Decode(&post); err != nil {
 			return nil, err
 		}
-
 		posts = append(posts, &post)
 	}
 
 	return posts, nil
 }
 
-func (dao *mongoPostDAO) ListByUserID(ctx context.Context, user_id primitive.ObjectID, limit, skip int64) ([]*Post, error) {
+func (dao *mongoPostDAO) ListByUserID(ctx context.Context, userID primitive.ObjectID, limit, skip int64) ([]*Post, error) {
 	o := options.Find().SetLimit(limit).SetSkip(skip)
 
-	cursor, err := dao.collection.Find(ctx, bson.M{"user_id": user_id}, o)
+	cursor, err := dao.collection.Find(ctx, bson.M{"user_id": userID}, o)
 	if err != nil {
 		return nil, err
 	}
+	defer cursor.Close(ctx)
 
 	posts := make([]*Post, 0)
 	for cursor.Next(ctx) {
@@ -101,6 +117,7 @@ func (dao *mongoPostDAO) UpdateContent(ctx context.Context, post *Post) error {
 			"$set": bson.M{
 				"title":      post.Title,
 				"content":    post.Content,
+				"image":      post.Image,
 				"tags":       post.Tags,
 				"updated_at": time.Now(),
 			},
@@ -150,10 +167,10 @@ func (dao *mongoPostDAO) UpdateViews(ctx context.Context, id primitive.ObjectID)
 	return nil
 }
 
-func (dao *mongoPostDAO) Delete(ctx context.Context, id primitive.ObjectID, user_id primitive.ObjectID) error {
+func (dao *mongoPostDAO) Delete(ctx context.Context, id, userID primitive.ObjectID) error {
 	if result, err := dao.collection.DeleteOne(ctx, bson.M{
 		"_id":     id,
-		"user_id": user_id,
+		"user_id": userID,
 	}); err != nil {
 		return err
 	} else if result.DeletedCount == 0 {

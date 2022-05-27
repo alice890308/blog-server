@@ -2,7 +2,7 @@ package service
 
 import (
 	"io"
-	"io/ioutil"
+	"io/fs"
 	"log"
 	"net/http"
 	"os"
@@ -15,6 +15,12 @@ import (
 type Service struct {
 	authkit.JWT
 }
+
+const (
+	bufferSize int = 512
+	dirAuth    int = 0666
+	fileAuth   int = 0644
+)
 
 func NewService(jwtManager authkit.JWT) *Service {
 	return &Service{jwtManager}
@@ -51,7 +57,7 @@ func (s *Service) Upload(c *gin.Context) {
 		return
 	}
 
-	buffer := make([]byte, 512)
+	buffer := make([]byte, bufferSize)
 	file, err := fileHeader.Open()
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
@@ -77,7 +83,7 @@ func (s *Service) Upload(c *gin.Context) {
 		return
 	}
 
-	fileBytes, err := ioutil.ReadAll(file)
+	fileBytes, err := io.ReadAll(file)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"message": "file read error",
@@ -88,11 +94,11 @@ func (s *Service) Upload(c *gin.Context) {
 	filePath := "file/static/" + userID + "/" + uuid.New().String()
 	switch contentType {
 	case "image/jpg":
-		filePath = filePath + ".jpg"
+		filePath += ".jpg"
 	case "image/png":
-		filePath = filePath + ".png"
+		filePath += ".png"
 	case "image/jpeg":
-		filePath = filePath + ".jpeg"
+		filePath += ".jpeg"
 	default:
 		c.JSON(http.StatusBadRequest, gin.H{
 			"message": "file type error",
@@ -100,7 +106,7 @@ func (s *Service) Upload(c *gin.Context) {
 		return
 	}
 
-	err = ioutil.WriteFile(filePath, fileBytes, 0644)
+	err = os.WriteFile(filePath, fileBytes, fs.FileMode(fileAuth))
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"message": "write file error",
@@ -115,8 +121,7 @@ func (s *Service) Upload(c *gin.Context) {
 }
 
 func (s *Service) getUserID(accessToken string) string {
-
-	accessToken = string(accessToken[7:])
+	accessToken = accessToken[7:]
 	log.Println(accessToken)
 
 	payload, err := s.JWT.Verify(accessToken)
@@ -131,7 +136,7 @@ func checkDir(userID string) error {
 	path := "/static/" + userID
 	_, err := os.Stat(path)
 	if os.IsNotExist(err) {
-		if e := os.Mkdir(path, 0666); e != nil {
+		if e := os.Mkdir(path, fs.FileMode(dirAuth)); e != nil {
 			return e
 		}
 	}

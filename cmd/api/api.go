@@ -57,6 +57,11 @@ func runAPI(_ *cobra.Command, _ []string) error {
 	}()
 
 	postDAO := dao.NewMongoPostDAO(mongoClient.Database().Collection("posts"))
+	err := postDAO.CreateIndex(ctx)
+	if err != nil {
+		logger.Fatal("failed to create post index!", zap.Error(err))
+	}
+
 	userDAO := dao.NewMongoUserDAO(mongoClient.Database().Collection("users"))
 	jwtManager := authkit.NewJWTManager(ctx, &args.JWTConfig)
 	svc := service.NewService(postDAO, userDAO, jwtManager)
