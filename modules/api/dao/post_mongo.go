@@ -23,6 +23,15 @@ func NewMongoPostDAO(collection *mongo.Collection) *mongoPostDAO {
 	}
 }
 
+func (dao *mongoPostDAO) CreateIndex() error {
+	model := mongo.IndexModel{Keys: bson.D{{"title", "text"}, {"tags", "text"}}}
+	_, err := dao.collection.Indexes().CreateOne(context.TODO(), model)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 func (dao *mongoPostDAO) Get(ctx context.Context, id primitive.ObjectID) (*Post, error) {
 	var post Post
 
@@ -36,10 +45,17 @@ func (dao *mongoPostDAO) Get(ctx context.Context, id primitive.ObjectID) (*Post,
 	return &post, nil
 }
 
-func (dao *mongoPostDAO) List(ctx context.Context, limit, skip int64) ([]*Post, error) {
-	o := options.Find().SetLimit(limit).SetSkip(skip)
+func (dao *mongoPostDAO) List(ctx context.Context, limit, skip int64, filter string) ([]*Post, error) {
+	var f bson.D
+	if filter != "" {
+		f = bson.D{{"$text", bson.D{{"$search", filter}}}}
+	}
+	sort := bson.D{{"score", bson.D{{"$meta", "textScore"}}}}
+	o := options.Find().SetLimit(limit).SetSkip(skip).SetSort(sort)
 
-	cursor, err := dao.collection.Find(ctx, bson.M{}, o)
+	dao.collection.CountDocuments()
+
+	cursor, err := dao.collection.Find(ctx, f, o)
 	if err != nil {
 		return nil, err
 	}
@@ -79,6 +95,14 @@ func (dao *mongoPostDAO) ListByUserID(ctx context.Context, user_id primitive.Obj
 	return posts, nil
 }
 
+func (dao *mongoPostDAO) TotalCount(ctx context.Context, filter string) (int64, error) {
+	count, err := dao.collection.CountDocuments(ctx, nil)
+	if err != nil {
+		return 0, err
+	}
+	return count, nil
+}
+
 func (dao *mongoPostDAO) Create(ctx context.Context, post *Post) (primitive.ObjectID, error) {
 	result, err := dao.collection.InsertOne(ctx, post)
 	if err != nil {
@@ -101,6 +125,7 @@ func (dao *mongoPostDAO) UpdateContent(ctx context.Context, post *Post) error {
 			"$set": bson.M{
 				"title":      post.Title,
 				"content":    post.Content,
+				"image":      post.Image,
 				"tags":       post.Tags,
 				"updated_at": time.Now(),
 			},

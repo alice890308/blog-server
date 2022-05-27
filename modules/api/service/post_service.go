@@ -30,6 +30,11 @@ func (s *Service) GetPost(ctx context.Context, req *pb.GetPostRequest) (*pb.GetP
 }
 
 func (s *Service) ListPost(ctx context.Context, req *pb.ListPostRequest) (*pb.ListPostResponse, error) {
+	total, err := s.postDAO.TotalCount(ctx)
+	if err != nil {
+		return nil, err
+	}
+
 	posts, err := s.postDAO.List(ctx, int64(req.GetLimit()), int64(req.GetSkip()))
 	if err != nil {
 		return nil, err
@@ -45,7 +50,7 @@ func (s *Service) ListPost(ctx context.Context, req *pb.ListPostRequest) (*pb.Li
 		pbPosts = append(pbPosts, post.ToProto(user.Name))
 	}
 
-	return &pb.ListPostResponse{Posts: pbPosts}, nil
+	return &pb.ListPostResponse{Posts: pbPosts, Total: total}, nil
 }
 
 func (s *Service) ListPostByUserID(ctx context.Context, req *pb.ListPostByUserIDRequest) (*pb.ListPostByUserIDResponse, error) {
@@ -86,11 +91,12 @@ func (s *Service) CreatePost(ctx context.Context, req *pb.CreatePostRequest) (*p
 
 	post := &dao.Post{
 		UserID:    userID,
-		Title:     req.Title,
-		Content:   req.Content,
+		Title:     req.GetTitle(),
+		Content:   req.GetContent(),
+		Image:     req.GetImage(),
 		Views:     0,
 		Likes:     0,
-		Tags:      req.Tags,
+		Tags:      req.GetTags(),
 		CreatedAT: time.Now(),
 		UpdatedAT: time.Now(),
 	}
@@ -117,9 +123,10 @@ func (s *Service) UpdatePostContent(ctx context.Context, req *pb.UpdatePostConte
 	post := &dao.Post{
 		ID:      postID,
 		UserID:  userID,
-		Title:   req.Title,
-		Content: req.Content,
-		Tags:    req.Tags,
+		Title:   req.GetTitle(),
+		Content: req.GetContent(),
+		Image:   req.GetImage(),
+		Tags:    req.GetTags(),
 	}
 
 	if err := s.postDAO.UpdateContent(ctx, post); err != nil {
