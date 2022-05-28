@@ -91,7 +91,7 @@ func (s *Service) Upload(c *gin.Context) {
 		return
 	}
 
-	filePath := "file/static/" + userID + "/" + uuid.New().String()
+	filePath := "static/" + userID + "/" + uuid.New().String()
 	switch contentType {
 	case "image/jpg":
 		filePath += ".jpg"
@@ -109,14 +109,14 @@ func (s *Service) Upload(c *gin.Context) {
 	err = os.WriteFile(filePath, fileBytes, fs.FileMode(fileAuth))
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
-			"message": "write file error",
+			"message": err.Error(),
 		})
 		return
 	}
 
 	c.JSON(http.StatusAccepted, gin.H{
 		"message":  "success",
-		"filepath": filePath,
+		"filepath": "file/" + filePath,
 	})
 }
 
