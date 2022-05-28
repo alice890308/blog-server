@@ -80,6 +80,10 @@ func (s *Service) UpdateUser(ctx context.Context, req *pb.UpdateUserRequest) (*p
 		Name:        req.GetUserName(),
 		Description: req.GetDescription(),
 		Avator:      req.GetAvator(),
+		IG:          req.GetIg(),
+		FB:          req.GetFb(),
+		TW:          req.GetTw(),
+		Email:       req.GetEmail(),
 	}
 
 	err = s.userDAO.Update(ctx, user)
