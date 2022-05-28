@@ -3,6 +3,7 @@ package service
 import (
 	"context"
 	"errors"
+	"fmt"
 	"time"
 
 	"github.com/alice890308/blog-server/modules/api/dao"
@@ -39,7 +40,8 @@ func (s *Service) ListPost(ctx context.Context, req *pb.ListPostRequest) (*pb.Li
 	for _, post := range posts {
 		user, err := s.userDAO.Get(ctx, post.UserID)
 		if err != nil {
-			return nil, err
+			fmt.Println("failed to match user id: " + post.UserID.Hex() + " in post id: " + post.ID.Hex())
+			continue
 		}
 
 		pbPosts = append(pbPosts, post.ToProto(user.Name))

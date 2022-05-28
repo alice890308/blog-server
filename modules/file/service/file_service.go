@@ -44,7 +44,7 @@ func (s *Service) Upload(c *gin.Context) {
 	err := checkDir(userID)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
-			"message": "upload file error",
+			"message": "check dir error",
 		})
 		return
 	}
@@ -52,7 +52,7 @@ func (s *Service) Upload(c *gin.Context) {
 	fileHeader, err := c.FormFile("file")
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
-			"message": "upload file error",
+			"message": "get formfile error",
 		})
 		return
 	}
@@ -69,7 +69,7 @@ func (s *Service) Upload(c *gin.Context) {
 	_, err = file.Read(buffer)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
-			"message": "file read error",
+			"message": "file read to buffer error",
 		})
 		return
 	}
@@ -78,7 +78,7 @@ func (s *Service) Upload(c *gin.Context) {
 	_, err = file.Seek(0, io.SeekStart)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
-			"message": "file read error",
+			"message": "file seek error",
 		})
 		return
 	}
