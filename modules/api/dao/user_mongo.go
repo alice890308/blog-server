@@ -90,6 +90,10 @@ func (dao *mongoUserDAO) Update(ctx context.Context, user *User) error {
 				"name":        user.Name,
 				"description": user.Description,
 				"avator":      user.Avator,
+				"ig":          user.IG,
+				"fb":          user.FB,
+				"tw":          user.TW,
+				"email":       user.Email,
 			},
 		},
 	); err != nil {
