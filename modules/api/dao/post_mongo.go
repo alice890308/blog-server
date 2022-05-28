@@ -34,8 +34,14 @@ func (dao *mongoPostDAO) CreateIndex(ctx context.Context) error {
 
 func (dao *mongoPostDAO) Get(ctx context.Context, id primitive.ObjectID) (*Post, error) {
 	var post Post
+	filter := bson.M{"_id": id}
+	update := bson.M{"$inc": bson.M{"views": 1}}
 
-	if err := dao.collection.FindOne(ctx, bson.M{"_id": id}).Decode(&post); err != nil {
+	if err := dao.collection.FindOneAndUpdate(
+		ctx,
+		filter,
+		update,
+	).Decode(&post); err != nil {
 		if errors.Is(err, mongo.ErrNilDocument) {
 			return nil, ErrPostNotFound
 		}
