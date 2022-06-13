@@ -13,12 +13,12 @@ jobs:
     - name: setup go
       uses: actions/setup-go@v3
       with:
-        go-version: 1.18
+        go-version: 1.17
 
     - name: golangci-lint
       uses: golangci/golangci-lint-action@v3
       with:
-        version: v3.2.0
+        version: v1.44.2
 
   # build image
   build:
@@ -32,7 +32,7 @@ jobs:
     - name: setup go
       uses: actions/setup-go@v3
       with:
-        go-version: 1.18
+        go-version: 1.17
         
     - name: cache
       uses: actions/cache@v3
