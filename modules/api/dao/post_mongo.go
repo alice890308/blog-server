@@ -52,13 +52,14 @@ func (dao *mongoPostDAO) Get(ctx context.Context, id primitive.ObjectID) (*Post,
 }
 
 func (dao *mongoPostDAO) List(ctx context.Context, limit, skip int64, filter string) ([]*Post, error) {
-	var f, sort bson.M
+	var f bson.M
+	var sort bson.D
 
 	if filter != "" {
 		f = bson.D{{"$text", bson.D{{"$search", filter}}}}.Map()
-		sort = bson.D{{"score", bson.D{{"$meta", "textScore"}}}, {"updated_at", -1}}.Map()
+		sort = bson.D{{"score", bson.D{{"$meta", "textScore"}}}, {"updated_at", -1}}
 	} else {
-		sort = bson.M{"updated_at": -1}
+		sort = bson.D{{"updated_at", -1}}
 	}
 	o := options.Find().SetLimit(limit).SetSkip(skip).SetSort(sort)
 
@@ -82,7 +83,7 @@ func (dao *mongoPostDAO) List(ctx context.Context, limit, skip int64, filter str
 }
 
 func (dao *mongoPostDAO) ListByUserID(ctx context.Context, userID primitive.ObjectID, limit, skip int64) ([]*Post, error) {
-	o := options.Find().SetLimit(limit).SetSkip(skip).SetSort(bson.M{"updated_at": -1})
+	o := options.Find().SetLimit(limit).SetSkip(skip).SetSort(bson.D{{"updated_at", -1}})
 
 	cursor, err := dao.collection.Find(ctx, bson.M{"user_id": userID}, o)
 	if err != nil {
