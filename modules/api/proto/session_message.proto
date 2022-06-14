@@ -4,6 +4,12 @@ package pb;
 
 option go_package = "/pb";
 
+message HealthRequest {}
+
+message HealthResponse {
+    string status = 1;
+}
+
 message LoginRequest {
     string user_account = 1;
     string user_password = 2;

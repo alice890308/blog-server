@@ -4,12 +4,24 @@ metadata:
   name: ingress
 spec:
   rules:
-  - http:
+  - host: file.ivanouo.one
+    http:
       paths:
-      - path: /file
+      - path: /
         pathType: Prefix
         backend:
           service:
             name: file
+            port:
+              number: 80
+
+  - host: gateway.ivanouo.one
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: gateway
             port:
               number: 80

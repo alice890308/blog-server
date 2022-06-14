@@ -46,13 +46,13 @@ func runFile(_ *cobra.Command, _ []string) error {
 
 	router.Use(middleware.CORS())
 
-	router.StaticFS("/file/static", gin.Dir("/static", false))
+	router.StaticFS("/static", gin.Dir("/static", false))
 
-	router.GET("/file/status", func(c *gin.Context) {
+	router.GET("/", func(c *gin.Context) {
 		svc.Status(c)
 	})
 
-	router.POST("/file/upload", func(c *gin.Context) {
+	router.POST("/upload", func(c *gin.Context) {
 		svc.Upload(c)
 	})
 
