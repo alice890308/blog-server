@@ -8,6 +8,12 @@ import "modules/api/proto/session_message.proto";
 option go_package = "/pb";
 
 service Session {
+    rpc Health(HealthRequest) returns (HealthResponse) {
+        option (google.api.http) = {
+            get: "/"
+        };
+    }
+
     rpc Login(LoginRequest) returns (LoginResponse) {
         option (google.api.http) = {
             post: "/session"

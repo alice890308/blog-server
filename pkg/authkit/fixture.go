@@ -14,6 +14,7 @@ var publicAPI = map[string]bool{
 	"/pb.User/CreateUser":       true,
 	"/pb.User/GetUser":          true,
 	"/pb.Session/Login":         true,
+	"/pb.Session/Health":        true,
 }
 
 var (

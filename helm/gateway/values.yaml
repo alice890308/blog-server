@@ -5,7 +5,7 @@
 replicaCount: 1
 
 image:
-  repository: tsw303005/blog-server
+  repository: alice890308/blog-server
   pullPolicy: Always
   # Overrides the image tag whose default is the chart appVersion.
   tag: latest
@@ -39,7 +39,7 @@ securityContext: {}
 service:
   type: ClusterIP
   port: 80
-  target: 8080
+  targetPort: 8080
 
 ingress:
   enabled: false
