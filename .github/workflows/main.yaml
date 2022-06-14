@@ -67,5 +67,5 @@ jobs:
       with:
         context: .
         file: ./Dockerfile
-        push: true
+        push: ${{ github.ref == 'refs/heads/master' }}
         tags: ${{ env.IMAGE_NAME }}:latest,${{ env.IMAGE_NAME }}:${{ github.sha }}
