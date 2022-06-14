@@ -116,7 +116,7 @@ func (s *Service) Upload(c *gin.Context) {
 
 	c.JSON(http.StatusAccepted, gin.H{
 		"message":  "success",
-		"filepath": "file/" + filePath,
+		"filepath": filePath,
 	})
 }
 
