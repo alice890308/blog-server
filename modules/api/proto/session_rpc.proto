@@ -11,7 +11,6 @@ service Session {
     rpc Health(HealthRequest) returns (HealthResponse) {
         option (google.api.http) = {
             get: "/"
-            response_body: "*"
         };
     }
 
